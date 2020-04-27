@@ -8,8 +8,6 @@ import javax.persistence.*;
 public class PatentKeywords {
 
     @Id
-    @Column(name = "id")
-    private long id;
     @Column(name = "patent_id")
     private String patentId;
     @Column(name = "keyword")

@@ -10,7 +10,6 @@ body {
 }
 
 /* Simple dashboard grid CSS */
-
 /* Assign grid instructions to our parent grid container */
 .grid-container {
   display: grid;
@@ -92,12 +91,13 @@ body {
 }
 
 .main-cards {
-  column-count: 2;
+  column-count: 3;
   column-gap: 20px;
   margin: 20px;
 }
 
 .card {
+  color: #2c3e50;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,15 +112,24 @@ body {
 
 /* Force varying heights to simulate dynamic content */
 .card:first-child {
-  height: 485px;
+  height: auto;
+  min-height: 620px;
 }
 
 .card:nth-child(2) {
-  height: 200px;
+  min-height: 300px;
 }
 
 .card:nth-child(3) {
-  height: 265px;
+  min-height: 300px;
+}
+
+.card:nth-child(4) {
+  min-height: 300px;
+}
+
+.card:nth-child(5) {
+  min-height: 300px;
 }
 
 .main-header {
@@ -128,7 +137,7 @@ body {
   justify-content: space-between;
   margin: 20px;
   padding: 20px;
-  height: auto;; /* Force our height since we don't have actual content yet */
+  height: auto; /* Force our height since we don't have actual content yet */
   background-color: #e3e4e6;
   color: #2c3e50;
   font-weight: 700;
@@ -144,6 +153,42 @@ body {
   font-weight: 700;
 }
 
+.patentListClass {
+  list-style-type: none;
+  width: 100%;
+  border: none;
+  padding: 0px;
+}
+
+.patentListClass ul {
+}
+
+.patentListClass li {
+  display: grid;
+  padding: 10px;
+  color: #2c3e50;
+}
+
+.patentListClass li:hover {
+  transition: background 0.8s;
+  background-color: #e3e4e6;
+  cursor: pointer;
+}
+
+.patentListClass_active {
+  background-color: #e3e4e6;
+  cursor: pointer;
+}
+
+
+.patentListItemId {
+  grid-column: 1;
+}
+
+.patentListItemCount {
+  grid-column: 2;
+  text-align: right;
+}
 
 .main-dropdown select {
   border: none;
@@ -178,3 +223,4 @@ body {
   background-size: 100%;
   transition: background 0s;
 }
+

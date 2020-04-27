@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
       <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="/css/styles.css">
       <link href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
-      <script src="/js/clickHandlers.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script src="/js/scripts.js"></script>
     <title>SWM Dashboard</title>
   </head>
   <body>
     <div class="grid-container">
       <header class="header">
-        <div class="header__1">Page 1</div>
-        <div class="header__2">Page 2</div>
-        <div class="header__3">Page 3</div>
-        <div class="header__4">Page 4</div>
+        <div class="header__1">Semantic Web Mining Dashboard</div>
+<!--        <div class="header__2">Page 2</div>-->
+<!--        <div class="header__3">Page 3</div>-->
+<!--        <div class="header__4">Page 4</div>-->
       </header>
 
       <aside class="sidenav">
@@ -22,9 +23,10 @@
           <li class="sidenav__list-item ripple" id="sidenav_2" onclick="changeSection(sidenav_2)">Topic Viewer</li>
         </ul>
       </aside>
+
       <main class="main">
 
-        <div class="main-header">
+<!--         <div class="main-header">
           <div class="main-header__heading" id="main-header__heading">Patent Viewer</div>
 
           <div class="main-dropdown">
@@ -33,38 +35,57 @@
               <option value="option_1">Option 2</option>
             </select>
           </div>
-        </div>
+        </div> -->
 
-        <div class="main-overview">
-          <div class="overviewcard">
-            <div class="overviewcard__icon">Overview</div>
-            <div class="overviewcard__info">Card</div>
-          </div>
-          <div class="overviewcard">
-            <div class="overviewcard__icon">Overview</div>
-            <div class="overviewcard__info">Card</div>
-          </div>
-          <div class="overviewcard">
-            <div class="overviewcard__icon">Overview</div>
-            <div class="overviewcard__info">Card</div>
-          </div>
-          <div class="overviewcard">
-            <div class="overviewcard__icon">Overview</div>
-            <div class="overviewcard__info">Card</div>
-          </div>
-        </div>
+<!--        <div class="main-overview">-->
+<!--          <div class="overviewcard">-->
+<!--            <div class="overviewcard__icon">Overview</div>-->
+<!--            <div class="overviewcard__info">Card</div>-->
+<!--          </div>-->
+<!--          <div class="overviewcard">-->
+<!--            <div class="overviewcard__icon">Overview</div>-->
+<!--            <div class="overviewcard__info">Card</div>-->
+<!--          </div>-->
+<!--          <div class="overviewcard">-->
+<!--            <div class="overviewcard__icon">Overview</div>-->
+<!--            <div class="overviewcard__info">Card</div>-->
+<!--          </div>-->
+<!--          <div class="overviewcard">-->
+<!--            <div class="overviewcard__icon">Overview</div>-->
+<!--            <div class="overviewcard__info">Card</div>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div class="main-cards">
-          <div class="card">Card</div>
-          <div class="card">Card</div>
-          <div class="card">Card</div>
+
+          <div class="card" id="patent_table">
+            <div id="loadingText"></div>
+            <div id="patentList" class="patentListClass">
+<!--               	<ul id='patentListUl' class='patentListClass'>
+	                <li id="item1" onclick="updateChartsBasedOnPatent(item1)" class="ripple">
+	                  <div class="patentListItemId">
+	                    US1525015A
+	                  </div>
+	                  <div class="patentListItemCount">
+	                    400
+	                  </div>
+	                </li>
+	            <ul> -->
+            </div>
+          </div>
+
+          <div id="card2" class="card">Card</div>
+          <div id="card3" class="card">Card</div>
+          <div id="card4" class="card">Card</div>
+          <div id="card5" class="card">Card</div>
         </div>
       </main>
+
       <footer class="footer">
-        <div class="footer__1">Link 1</div>
-        <div class="footer__2">Link 2</div>
-        <div class="footer__3">Link 3</div>
-        <div class="footer__4">Link 4</div>
+<!--        <div class="footer__1">Link 1</div>-->
+<!--        <div class="footer__2">Link 2</div>-->
+<!--        <div class="footer__3">Link 3</div>-->
+<!--        <div class="footer__4">Link 4</div>-->
       </footer>
     </div>
   </body>
