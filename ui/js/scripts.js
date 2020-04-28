@@ -122,12 +122,11 @@ function updateCard3() {
       window.patent_similarities_tfidf = data;
       if(data.length!==0)
       {
-        console.log(data);
         $('#card3Text').html('');
         // convert keys to array to fit bar chart
         var patents = [];
         var similarities = [];
-        for(i=1;i<=10;i++)
+        for(i=1;i<=5;i++)
         {
           patentKey = "patent"+i;
           similarityKey = "similarity"+i;
@@ -152,12 +151,27 @@ function updateCard3() {
               datasets: [{
                   label: 'Similarity % ',
                   data: similarities,
-                  backgroundColor: '#16a085',
-                  borderColor: '#1abc9c',
-                  borderWidth: 0
+                  backgroundColor: '#AB6C82',
+                  // [
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  // ],
+                  borderColor: '#AB6C82',
+                  borderWidth: 0,
               }]
           },
           options: {
+              legend: {
+                display: false,
+              },
               labels: {
                 defaultFontFamily: "'Sen', sans-serif",
               },
@@ -167,19 +181,139 @@ function updateCard3() {
                           beginAtZero: true,
                           suggestedMax: 100,
                           display: true,
-                      }
-                  }]
+                          callback: function(label, index, labels) {
+                              return label+'%';
+                          },
+                      },
+                      gridLines: {
+                        color: '#ecf0f1',
+                        borderDash: [8, 4],
+                        lineWidth: 2,
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Similarity %'
+                      },
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      color: '#ecf0f1',
+                      borderDash: [8, 4],
+                      lineWidth: 2,
+                    },
+                  }],
               }
           }
         });
       }
+      else {
+        if(window.tfidfDrawnChart!==undefined)
+        {
+          window.tfidfDrawnChart.destroy();
+        }
+      }
+
   });
 }
 
 
 //function to update card 2
 function updateCard4() {
-  $('#card4Content').html(window.patentId);
+  $('#card4Text').html('No Data Available');
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_similarities_lda/",
+      data: {
+          "patent_id": window.patentId,
+      },
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.patent_similarities_lda = data;
+      if(data.length!==0)
+      {
+        $('#card4Text').html('');
+        // convert keys to array to fit bar chart
+        var patents = [];
+        var similarities = [];
+        for(i=1;i<=5;i++)
+        {
+          patentKey = "patent"+i;
+          similarityKey = "similarity"+i;
+          patents.push(data[patentKey]);
+          similarities.push((data[similarityKey]*100).toFixed(4));
+        }
+
+        var ldaChart = document.getElementById('ldaChart').getContext('2d');
+
+        //draw new chart only if chart doesn't already exist
+        if(window.ldaDrawnChart!==undefined)
+        {
+          window.ldaDrawnChart.destroy();
+        }
+        window.ldaDrawnChart = new Chart(ldaChart, {
+          type: 'horizontalBar',
+          data: {
+              labels: patents,
+              datasets: [{
+                  label: 'Similarity % ',
+                  data: similarities,
+                  backgroundColor: '#D8737F',
+                  // [
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  // ],
+                  borderColor: '#D8737F',
+                  borderWidth: 0,
+              }]
+          },
+          options: {
+              legend: {
+                display: false,
+              },
+              labels: {
+                defaultFontFamily: "'Sen', sans-serif",
+              },
+              scales: {
+                  xAxes: [{
+                      gridLines: {
+                        color: '#ecf0f1',
+                        borderDash: [8, 6],
+                        lineWidth: 2,
+                      },
+                      ticks: {
+                          beginAtZero: true,
+                          suggestedMax: 100,
+                          display: true,
+                          callback: function(label, index, labels) {
+                              return label+'%';
+                          },
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Similarity %'
+                      },
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      color: '#ecf0f1',
+                      borderDash: [8, 4],
+                      lineWidth: 2,
+                    },
+                  }],
+              }
+          }
+        });
+      }
+  });
 }
 
 

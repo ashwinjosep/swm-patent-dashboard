@@ -118,36 +118,126 @@ cursor = connection.cursor()
 # stop_time = time.time()
 # print("Execution time", stop_time-start_time)
 
-# Logic for inserting into patent_similarities_tfidf table
+# # Logic for inserting into patent_similarities_tfidf table
+# # define insert query
+# insert_query = 	"insert into patent_similarities_tfidf (patent_id, " + \
+# 				"patent1, similarity1, patent2, similarity2, " + \
+# 				"patent3, similarity3, patent4, similarity4, " + \
+# 				"patent5, similarity5, patent6, similarity6, " + \
+# 				"patent7, similarity7, patent8, similarity8, " + \
+# 				"patent9, similarity9, patent10, similarity10) " + \
+# 			   	"values(%(patent_id)s, %(patent1)s, %(similarity1)s, " + \
+# 			   	"%(patent2)s, %(similarity2)s, %(patent3)s, %(similarity3)s, " + \
+# 			   	"%(patent4)s, %(similarity4)s, %(patent5)s, %(similarity5)s, " + \
+# 			   	"%(patent6)s, %(similarity6)s, %(patent7)s, %(similarity7)s, " + \
+# 			   	"%(patent8)s, %(similarity8)s, %(patent9)s, %(similarity9)s, " + \
+# 			   	"%(patent10)s, %(similarity10)s) on duplicate key update " + \
+# 			   	" patent_id = %(patent_id)s," + \
+# 		   		" patent1 = %(patent1)s, similarity1 = %(similarity1)s, " + \
+# 		   		" patent2 = %(patent2)s, similarity2 = %(similarity2)s, " + \
+# 		   		" patent3 = %(patent3)s, similarity3 = %(similarity3)s, " + \
+# 		   		" patent4 = %(patent4)s, similarity4 = %(similarity4)s, " + \
+# 		   		" patent5 = %(patent5)s, similarity5 = %(similarity5)s, " + \
+# 		   		" patent6 = %(patent6)s, similarity6 = %(similarity6)s, " + \
+# 		   		" patent7 = %(patent7)s, similarity7 = %(similarity7)s, " + \
+# 		   		" patent8 = %(patent8)s, similarity8 = %(similarity8)s, " + \
+# 		   		" patent9 = %(patent9)s, similarity9 = %(similarity9)s, " + \
+# 		   		" patent10 = %(patent10)s, similarity10 = %(similarity10)s ;"
+
+# # record start time
+# start_time = time.time()
+
+# file = "tfidf_output.csv"
+
+# # read csv file and get contents
+# with open(file, 'r') as csv_file:
+# 	csv_reader = csv.reader(csv_file)
+
+# 	# remove header
+# 	next(csv_reader)
+
+# 	for row in csv_reader:
+# 		patent_id = "US"+row[0].strip()+"A"
+# 		patent1 = "US"+row[1].strip()+"A"
+# 		similarity1 = row[2].strip()
+# 		patent2 = "US"+row[3].strip()+"A"
+# 		similarity2 = row[4].strip()
+# 		patent3 = "US"+row[5].strip()+"A"
+# 		similarity3 = row[6].strip()
+# 		patent4 = "US"+row[7].strip()+"A"
+# 		similarity4 = row[8].strip()
+# 		patent5 = "US"+row[9].strip()+"A"
+# 		similarity5 = row[10].strip()
+# 		patent6 = "US"+row[11].strip()+"A"
+# 		similarity6 = row[12].strip()
+# 		patent7 = "US"+row[13].strip()+"A"
+# 		similarity7 = row[14].strip()
+# 		patent8 = "US"+row[15].strip()+"A"
+# 		similarity8 = row[16].strip()
+# 		patent9 = "US"+row[17].strip()+"A"
+# 		similarity9 = row[18].strip()
+# 		patent10 = "US"+row[19].strip()+"A"
+# 		similarity10 = row[20].strip()
+
+# 		# make data for insert query
+# 		insert_query_data = {
+# 			'patent_id': patent_id,
+# 			'patent1': patent1,
+# 			'similarity1': similarity1,
+# 			'patent2': patent2,
+# 			'similarity2': similarity2,
+# 			'patent3': patent3,
+# 			'similarity3': similarity3,
+# 			'patent4': patent4,
+# 			'similarity4': similarity4,
+# 			'patent5': patent5,
+# 			'similarity5': similarity5,
+# 			'patent6': patent6,
+# 			'similarity6': similarity6,
+# 			'patent7': patent7,
+# 			'similarity7': similarity7,
+# 			'patent8': patent8,
+# 			'similarity8': similarity8,
+# 			'patent9': patent9,
+# 			'similarity9': similarity9,
+# 			'patent10': patent10,
+# 			'similarity10': similarity10,
+# 		}
+
+# 		# printing for log purposes
+# 		print(patent_id)
+
+# 		# execute the insert query
+# 		cursor.execute(insert_query, insert_query_data)
+# 		connection.commit()
+
+# # close the mysql connection
+# connection.close()
+
+# # get end time
+# stop_time = time.time()
+# print("Execution time", stop_time-start_time)
+
+# Logic for inserting into patent_similarities_lda table
 # define insert query
-insert_query = 	"insert into patent_similarities_tfidf (patent_id, " + \
+insert_query = 	"insert into patent_similarities_lda (patent_id, " + \
 				"patent1, similarity1, patent2, similarity2, " + \
 				"patent3, similarity3, patent4, similarity4, " + \
-				"patent5, similarity5, patent6, similarity6, " + \
-				"patent7, similarity7, patent8, similarity8, " + \
-				"patent9, similarity9, patent10, similarity10) " + \
+				"patent5, similarity5) " + \
 			   	"values(%(patent_id)s, %(patent1)s, %(similarity1)s, " + \
 			   	"%(patent2)s, %(similarity2)s, %(patent3)s, %(similarity3)s, " + \
-			   	"%(patent4)s, %(similarity4)s, %(patent5)s, %(similarity5)s, " + \
-			   	"%(patent6)s, %(similarity6)s, %(patent7)s, %(similarity7)s, " + \
-			   	"%(patent8)s, %(similarity8)s, %(patent9)s, %(similarity9)s, " + \
-			   	"%(patent10)s, %(similarity10)s) on duplicate key update " + \
+			   	"%(patent4)s, %(similarity4)s, %(patent5)s, %(similarity5)s) on duplicate key update " + \
 			   	" patent_id = %(patent_id)s," + \
 		   		" patent1 = %(patent1)s, similarity1 = %(similarity1)s, " + \
 		   		" patent2 = %(patent2)s, similarity2 = %(similarity2)s, " + \
 		   		" patent3 = %(patent3)s, similarity3 = %(similarity3)s, " + \
 		   		" patent4 = %(patent4)s, similarity4 = %(similarity4)s, " + \
-		   		" patent5 = %(patent5)s, similarity5 = %(similarity5)s, " + \
-		   		" patent6 = %(patent6)s, similarity6 = %(similarity6)s, " + \
-		   		" patent7 = %(patent7)s, similarity7 = %(similarity7)s, " + \
-		   		" patent8 = %(patent8)s, similarity8 = %(similarity8)s, " + \
-		   		" patent9 = %(patent9)s, similarity9 = %(similarity9)s, " + \
-		   		" patent10 = %(patent10)s, similarity10 = %(similarity10)s ;"
+		   		" patent5 = %(patent5)s, similarity5 = %(similarity5)s;"
 
 # record start time
 start_time = time.time()
 
-file = "tfidf_output.csv"
+file = "lda_similarities.csv"
 
 # read csv file and get contents
 with open(file, 'r') as csv_file:
@@ -158,26 +248,26 @@ with open(file, 'r') as csv_file:
 
 	for row in csv_reader:
 		patent_id = "US"+row[0].strip()+"A"
-		patent1 = "US"+row[1].strip()+"A"
-		similarity1 = row[2].strip()
-		patent2 = "US"+row[3].strip()+"A"
-		similarity2 = row[4].strip()
-		patent3 = "US"+row[5].strip()+"A"
-		similarity3 = row[6].strip()
-		patent4 = "US"+row[7].strip()+"A"
-		similarity4 = row[8].strip()
-		patent5 = "US"+row[9].strip()+"A"
-		similarity5 = row[10].strip()
-		patent6 = "US"+row[11].strip()+"A"
-		similarity6 = row[12].strip()
-		patent7 = "US"+row[13].strip()+"A"
-		similarity7 = row[14].strip()
-		patent8 = "US"+row[15].strip()+"A"
-		similarity8 = row[16].strip()
-		patent9 = "US"+row[17].strip()+"A"
-		similarity9 = row[18].strip()
-		patent10 = "US"+row[19].strip()+"A"
-		similarity10 = row[20].strip()
+		patent1 = "US"+row[1].strip().replace('\'','')+"A"
+		similarity1 = row[2].strip().replace('\'','')
+		patent2 = "US"+row[3].strip().replace('\'','')+"A"
+		similarity2 = row[4].strip().replace('\'','')
+		patent3 = "US"+row[5].strip().replace('\'','')+"A"
+		similarity3 = row[6].strip().replace('\'','')
+		patent4 = "US"+row[7].strip().replace('\'','')+"A"
+		similarity4 = row[8].strip().replace('\'','')
+		patent5 = "US"+row[9].strip().replace('\'','')+"A"
+		similarity5 = row[10].strip().replace('\'','')
+		# patent6 = "US"+row[11].strip()+"A"
+		# similarity6 = row[12].strip()
+		# patent7 = "US"+row[13].strip()+"A"
+		# similarity7 = row[14].strip()
+		# patent8 = "US"+row[15].strip()+"A"
+		# similarity8 = row[16].strip()
+		# patent9 = "US"+row[17].strip()+"A"
+		# similarity9 = row[18].strip()
+		# patent10 = "US"+row[19].strip()+"A"
+		# similarity10 = row[20].strip()
 
 		# make data for insert query
 		insert_query_data = {
@@ -192,16 +282,16 @@ with open(file, 'r') as csv_file:
 			'similarity4': similarity4,
 			'patent5': patent5,
 			'similarity5': similarity5,
-			'patent6': patent6,
-			'similarity6': similarity6,
-			'patent7': patent7,
-			'similarity7': similarity7,
-			'patent8': patent8,
-			'similarity8': similarity8,
-			'patent9': patent9,
-			'similarity9': similarity9,
-			'patent10': patent10,
-			'similarity10': similarity10,
+			# 'patent6': patent6,
+			# 'similarity6': similarity6,
+			# 'patent7': patent7,
+			# 'similarity7': similarity7,
+			# 'patent8': patent8,
+			# 'similarity8': similarity8,
+			# 'patent9': patent9,
+			# 'similarity9': similarity9,
+			# 'patent10': patent10,
+			# 'similarity10': similarity10,
 		}
 
 		# printing for log purposes
