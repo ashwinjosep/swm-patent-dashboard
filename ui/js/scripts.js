@@ -37,6 +37,7 @@ function updateChartsBasedOnPatent(elt) {
 
   //  set window.patent as the new element's id
   window.patentId = elt.id;
+  $('#patentTitle').html(window.patentId);
 
   //  Switch selection
   var elements = document.getElementById("patentListUl");
