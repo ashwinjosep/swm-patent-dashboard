@@ -8,6 +8,26 @@ function initializerFunction() {
 }
 
 
+//function to change page when nav buttons are Clicked
+function pageChange(inp) {
+  if(inp.id==='n')
+  {
+    if(window.page<50)
+      changePages(window.page+1);
+  }
+  else if (inp.id==='p') {
+    if(window.page>1)
+      changePages(window.page-1);
+  }
+  else if (inp.id==='f') {
+    changePages(1);
+  }
+  else {
+    changePages(50);
+  }
+}
+
+
 //function to update patents table
 function updatePatentsTable() {
     // $('#loadingText').html('Loading...');
@@ -88,6 +108,26 @@ function updateCard2() {
 //function to update card 2
 function updateCard3() {
   $('#card3Content').html(window.patentId);
+
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_similarities_tfidf/",
+      data: {
+          "patent_id": window.patentId,
+      },
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.patent_similarities_tfidf = data;
+      if(data.length!==0)
+      {
+        console.log(data);
+        // $('#patentKeywordList').html('');
+        // var keywords = data.keyword.split(',');
+        // keywords.forEach(elt => $('#patentKeywordList').append("<div class='"+
+        // "patentKeywordListItem'>"+elt+"</div>"));
+      }
+  });
 }
 
 
@@ -145,7 +185,6 @@ function changePages(page)
 {
   if(page!==window.page)
   {
-    console.log("Clicked");
     window.page = page;
     fillPageNumbers();
     window.start = (window.page-1) * window.limit;

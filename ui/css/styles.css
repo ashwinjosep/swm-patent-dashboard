@@ -131,15 +131,12 @@ body {
 }
 
 .card:nth-child(3) {
-  min-height: 300px;
 }
 
 .card:nth-child(4) {
-  min-height: 300px;
 }
 
 .card:nth-child(5) {
-  min-height: 300px;
 }
 
 .main-header {
@@ -272,7 +269,8 @@ body {
 }
 
 .patentListClass_active {
-  background-color: #e3e4e6;
+  background-color: #16a085;
+  color: white !important;
   cursor: pointer;
 }
 
