@@ -264,6 +264,7 @@ body {
 
 .patentListClass li:hover {
   transition: 0.4s;
+  color:  #2c3e50 !important;
   background-color: #e3e4e6;
   cursor: pointer;
 }
@@ -334,4 +335,9 @@ body {
   background-color: #1abc9c;
   background-size: 100%;
   transition: background 0s;
+}
+
+.tfidfChart {
+  height: auto;
+  width: auto;
 }

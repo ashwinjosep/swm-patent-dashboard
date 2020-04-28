@@ -5,6 +5,7 @@
       <link rel="stylesheet" href="/css/styles.css">
       <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
       <script src="/js/scripts.js"></script>
     <title>SWM Dashboard</title>
   </head>
@@ -97,16 +98,21 @@
           </div>
 
           <div id="card2" class="card">
-            <div id='card2Heading' class='cardHeading'>Top Keywords - Groundtruth</div>
+            <div id='card2Heading' class='cardHeading'>Top Keywords</div>
             <div id='card2Content' class="cardContent">
               <div id="patentKeywordList" class="patentKeywordList">
-                No Data
+                No Data Available
               </div>
             </div>
           </div>
           <div id="card3" class="card">
             <div id='card3Heading' class='cardHeading'>Similar Patents</div>
-            <div id='card3Content' class="cardContent">No Data</div>
+            <div id='card3Content' class="cardContent">
+              <canvas id='tfidfChart' class="tfidfChart"></canvas>
+              <div id="card3Text">
+                No Data Available
+              </div>
+            </div>
           </div>
           <div id="card4" class="card">
             <div id='card4Heading' class='cardHeading'>Topic Distribution</div>

@@ -5,6 +5,8 @@ function initializerFunction() {
     window.start = 0;
     window.limit = 20;
     window.page = 1;
+    Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
+    Chart.defaults.global.defaultFontStyle = "bold";
 }
 
 
@@ -82,7 +84,7 @@ function updateChartsBasedOnPatent(elt) {
 //function to update card 2
 function updateCard2() {
   // $('#card2Content').html(window.patentId);
-  $('#patentKeywordList').html('No Data');
+  $('#patentKeywordList').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_keywords/",
@@ -107,8 +109,7 @@ function updateCard2() {
 
 //function to update card 2
 function updateCard3() {
-  $('#card3Content').html(window.patentId);
-
+  $('#card3Text').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_similarities_tfidf/",
@@ -122,10 +123,55 @@ function updateCard3() {
       if(data.length!==0)
       {
         console.log(data);
-        // $('#patentKeywordList').html('');
-        // var keywords = data.keyword.split(',');
-        // keywords.forEach(elt => $('#patentKeywordList').append("<div class='"+
-        // "patentKeywordListItem'>"+elt+"</div>"));
+        $('#card3Text').html('');
+        // convert keys to array to fit bar chart
+        var patents = [];
+        var similarities = [];
+        for(i=1;i<=10;i++)
+        {
+          patentKey = "patent"+i;
+          similarityKey = "similarity"+i;
+          patents.push(data[patentKey]);
+          similarities.push((data[similarityKey]*100).toFixed(4));
+        }
+
+        var tfidfChart = document.getElementById('tfidfChart').getContext('2d');
+
+        //draw new chart only if chart doesn't already exist
+        if(window.tfidfDrawnChart!==undefined)
+        {
+          window.tfidfDrawnChart.destroy();
+        }
+        else {
+
+        }
+        window.tfidfDrawnChart = new Chart(tfidfChart, {
+          type: 'horizontalBar',
+          data: {
+              labels: patents,
+              datasets: [{
+                  label: 'Similarity % ',
+                  data: similarities,
+                  backgroundColor: '#16a085',
+                  borderColor: '#1abc9c',
+                  borderWidth: 0
+              }]
+          },
+          options: {
+              labels: {
+                defaultFontFamily: "'Sen', sans-serif",
+              },
+              scales: {
+                  xAxes: [{
+                      ticks: {
+                          beginAtZero: true,
+                          suggestedMax: 100,
+                          display: true,
+                      }
+                  }]
+              }
+          }
+        });
       }
   });
 }
