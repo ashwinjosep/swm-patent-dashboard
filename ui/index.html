@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
   <head>
       <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="/css/styles.css">
-      <link href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+      <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
       <script src="/js/scripts.js"></script>
     <title>SWM Dashboard</title>
@@ -59,8 +59,12 @@
         <div class="main-cards">
 
           <div class="card" id="patent_table">
-            <div id="loadingText"></div>
+            <div class='patentListClassHeading'>
+              <div class='patentListItemId'>Patent ID</div>
+              <div class='patentListItemCount'>Citation Count</div>
+            </div>
             <div id="patentList" class="patentList">
+              <div id="loadingText"></div>
 <!--               	<ul id='patentListUl' class='patentListClass'>
 	                <li id="item1" onclick="updateChartsBasedOnPatent(item1)" class="ripple">
 	                  <div class="patentListItemId">
@@ -72,12 +76,48 @@
 	                </li>
 	            <ul> -->
             </div>
+            <div id ="searchNav" class="searchNav">
+              <div class="searchNavFirst">
+                <a title="First Page"><i class="fa fa-fast-backward icon" aria-hidden="true"></i></a>
+              </div>
+              <div class="searchNavPrev">
+                <a title="Previous Page"><i class="fa fa-step-backward icon" aria-hidden="true"></i></a>
+              </div>
+              <div class="searchNavMiddle horizontal-scroll-wrapper">
+                <ul id="searchNavList">
+                </ul>
+              </div>
+              <div class="searchNavNext">
+                <a title="Next Page"><i class="fa fa-step-forward icon" aria-hidden="true"></i></a>
+              </div>
+              <div class="searchNavLast">
+                <a title="Last Page"><i class="fa fa-fast-forward icon" aria-hidden="true"></i></a>
+              </div>
+            </div>
           </div>
 
-          <div id="card2" class="card">Card</div>
-          <div id="card3" class="card">Card</div>
-          <div id="card4" class="card">Card</div>
-          <div id="card5" class="card">Card</div>
+          <div id="card2" class="card">
+            <div id='card2Heading' class='cardHeading'>Top Keywords - Groundtruth</div>
+            <div id='card2Content' class="cardContent">
+              <div id="patentKeywordList" class="patentKeywordList">
+                No Data
+              </div>
+            </div>
+          </div>
+          <div id="card3" class="card">
+            <div id='card3Heading' class='cardHeading'>Similar Patents</div>
+            <div id='card3Content' class="cardContent">Card</div>
+          </div>
+          <div id="card4" class="card">
+            <div id='card4Heading' class='cardHeading'>Topic Distribution</div>
+            <div id='card4Content' class="cardContent">Card</div>
+          </div>
+          <div id="card4" class="card">
+            <div id='card5Heading' class='cardHeading'>Top 5 Keywords - Groundtruth</div>
+            <div id='card5Content' class="cardContent">Card</div>
+          </div>
+
+
         </div>
       </main>
 

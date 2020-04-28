@@ -4,26 +4,25 @@ function initializerFunction() {
     window.section = "sidenav_1";
     window.start = 0;
     window.limit = 20;
+    window.page = 1;
 }
 
 
 //function to update patents table
 function updatePatentsTable() {
-    $('#loadingText').html('Loading...');
+    // $('#loadingText').html('Loading...');
     $('#patentList').html('');
     $.ajax({
         type:"GET",
-        url: "/api/patent_citations_range/",
+        url: "http://localhost:8080/api/patent_citations_range/",
         data: {
             "start": window.start,
             "limit": window.limit,
         },
         dataType: "JSON",
     }).then(function(data) {
-        $('#loadingText').html('');
+        // $('#loadingText').html('');
         window.patent_citations = data;
-        $('#patentList').append("<div class='patentListClassHeading'><div class='patentListItemId'>Patent ID</div><div class"+
-        "='patentListItemCount'>Citation Count</div></div>");
         $('#patentList').append("<ul id='patentListUl' class='patentListClass'></ul>");
         data.forEach(elt => $('#patentListUl').append("<li id='"+elt.patentId+
         "' onclick=updateChartsBasedOnPatent("+elt.patentId+") class='ripple'><div"+
@@ -61,25 +60,96 @@ function updateChartsBasedOnPatent(elt) {
 
 //function to update card 2
 function updateCard2() {
-  $('#card2').html(window.patentId);
+  // $('#card2Content').html(window.patentId);
+  $('#patentKeywordList').html('No Data');
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_keywords/",
+      data: {
+          "patent_id": window.patentId,
+      },
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.patent_keywords = data;
+      if(data.length!==0)
+      {
+        $('#patentKeywordList').html('');
+        var keywords = data.keyword.split(',');
+        keywords.forEach(elt => $('#patentKeywordList').append("<div class='"+
+        "patentKeywordListItem'>"+elt+"</div>"));
+      }
+  });
+
 }
 
 
 //function to update card 2
 function updateCard3() {
-  $('#card3').html(window.patentId);
+  $('#card3Content').html(window.patentId);
 }
 
 
 //function to update card 2
 function updateCard4() {
-  $('#card4').html(window.patentId);
+  $('#card4Content').html(window.patentId);
 }
 
 
 //function to update card 2
 function updateCard5() {
-  $('#card5').html(window.patentId);
+  $('#card5Content').html(window.patentId);
+}
+
+
+// function to fill page numbers
+function fillPageNumbers() {
+  var start = window.page;
+  if(start>2)
+  {
+    start = window.page-2;
+  }
+  else {
+    start = 1;
+  }
+
+  if(start>45)
+  {
+    start = 46;
+  }
+  var end = start + 5;
+  $('#searchNavList').html('')
+  for(i=start;i<end;i++)
+  {
+    $('#searchNavList').append("<li onclick='changePages("+i+")' id= 'page"+i+"'>"+i+"</li>");
+  }
+
+  //  Switch selection
+  var elements = document.getElementById("searchNavList");
+  elementId = "page"+window.page;
+  for(i=0;i<elements.children.length;i++)
+  {
+    if(elements.children[i].id===elementId){
+      elements.children[i].classList.add("searchNav_active");
+    }
+    else {
+      elements.children[i].classList.remove("searchNav_active");
+    }
+  }
+}
+
+
+//function to switch pages
+function changePages(page)
+{
+  if(page!==window.page)
+  {
+    console.log("Clicked");
+    window.page = page;
+    fillPageNumbers();
+    window.start = (window.page-1) * window.limit;
+    updatePatentsTable();
+  }
 }
 
 
@@ -87,6 +157,7 @@ function updateCard5() {
 $(document).ready(function() {
 
   initializerFunction();
+  fillPageNumbers();
   updatePatentsTable();
 });
 
@@ -120,4 +191,3 @@ function setHeading(text)
   var heading_div = document.getElementById("main-header__heading");
   heading_div.innerText = text;
 }
-
