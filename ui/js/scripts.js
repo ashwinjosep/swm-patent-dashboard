@@ -82,6 +82,8 @@ function updateChartsBasedOnPatent(elt) {
   updateCard3();
   updateCard4();
   updateCard5();
+  updateCard7();
+  updateCard8();
 }
 
 
@@ -317,8 +319,226 @@ function updateCard4() {
           }
         });
       }
+      else {
+        if(window.ldaDrawnChart!==undefined)
+        {
+          window.ldaDrawnChart.destroy();
+        }
+      }
   });
 }
+
+
+//function to update card 7
+function updateCard7() {
+  $('#card7Text').html('No Data Available');
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_similarities_embeddings/",
+      data: {
+          "patent_id": window.patentId,
+      },
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.patent_similarities_embeddings = data;
+      if(data.length!==0)
+      {
+        $('#card7Text').html('');
+        // convert keys to array to fit bar chart
+        var patents = [];
+        var similarities = [];
+        for(i=1;i<=10;i++)
+        {
+          patentKey = "patent"+i;
+          similarityKey = "similarity"+i;
+          patents.push(data[patentKey]);
+          similarities.push((data[similarityKey]).toFixed(4));
+        }
+
+        var embeddingChart = document.getElementById('embeddingChart').getContext('2d');
+
+        //draw new chart only if chart doesn't already exist
+        if(window.embeddingDrawnChart!==undefined)
+        {
+          window.embeddingDrawnChart.destroy();
+        }
+        window.embeddingDrawnChart = new Chart(embeddingChart, {
+          type: 'horizontalBar',
+          data: {
+              labels: patents,
+              datasets: [{
+                  label: 'Euclidean Distance',
+                  data: similarities,
+                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                  // [
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  // ],
+                  borderColor: '#D8737F',
+                  borderWidth: 2,
+              }]
+          },
+          options: {
+              legend: {
+                display: false,
+              },
+              labels: {
+                defaultFontFamily: "'Sen', sans-serif",
+              },
+              scales: {
+                  xAxes: [{
+                      gridLines: {
+                        color: '#ecf0f1',
+                        borderDash: [8, 6],
+                        lineWidth: 2,
+                      },
+                      ticks: {
+                          beginAtZero: true,
+                          display: true,
+                          // callback: function(label, index, labels) {
+                          //     return label+'%';
+                          // },
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Euclidean Distance'
+                      },
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      color: '#ecf0f1',
+                      borderDash: [8, 4],
+                      lineWidth: 2,
+                    },
+                  }],
+              }
+          }
+        });
+      }
+      else {
+        if(window.embeddingDrawnChart!==undefined)
+        {
+          window.embeddingDrawnChart.destroy();
+        }
+      }
+
+  });
+}
+
+
+//function to update card 8
+function updateCard8() {
+  $('#card8Text').html('No Data Available');
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_similarities_bert/",
+      data: {
+          "patent_id": window.patentId,
+      },
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.patent_similarities_bert = data;
+      if(data.length!==0)
+      {
+        $('#card8Text').html('');
+        // convert keys to array to fit bar chart
+        var patents = [];
+        var similarities = [];
+        for(i=1;i<=10;i++)
+        {
+          patentKey = "patent"+i;
+          similarityKey = "similarity"+i;
+          patents.push(data[patentKey]);
+          similarities.push((data[similarityKey]).toFixed(4));
+        }
+
+        var bertChart = document.getElementById('bertChart').getContext('2d');
+
+        //draw new chart only if chart doesn't already exist
+        if(window.bertDrawnChart!==undefined)
+        {
+          window.bertDrawnChart.destroy();
+        }
+        window.bertDrawnChart = new Chart(bertChart, {
+          type: 'horizontalBar',
+          data: {
+              labels: patents,
+              datasets: [{
+                  label: 'Euclidean Distance',
+                  data: similarities,
+                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                  // [
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  //   '#475C7A',
+                  //   '#685D79',
+                  //   '#AB6C82',
+                  //   '#D8737F',
+                  //   '#FCBB6D',
+                  // ],
+                  borderColor: '#D8737F',
+                  borderWidth: 2,
+              }]
+          },
+          options: {
+              legend: {
+                display: false,
+              },
+              labels: {
+                defaultFontFamily: "'Sen', sans-serif",
+              },
+              scales: {
+                  xAxes: [{
+                      gridLines: {
+                        color: '#ecf0f1',
+                        borderDash: [8, 6],
+                        lineWidth: 2,
+                      },
+                      ticks: {
+                          beginAtZero: true,
+                          display: true,
+                          // callback: function(label, index, labels) {
+                          //     return label+'%';
+                          // },
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Euclidean Distance'
+                      },
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      color: '#ecf0f1',
+                      borderDash: [8, 4],
+                      lineWidth: 2,
+                    },
+                  }],
+              }
+          }
+        });
+      }
+      else {
+        if(window.bertDrawnChart!==undefined)
+        {
+          window.bertDrawnChart.destroy();
+        }
+      }
+  });
+}
+
 
 
 //function to update card 2
