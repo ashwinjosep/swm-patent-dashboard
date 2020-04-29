@@ -51,6 +51,9 @@ function updatePatentsTable() {
         " class='patentListItemId'>"+elt.patentId+"</div><div class='patentListItemCount'>"+
         elt.citationCount+"</div></li>"));
     });
+
+
+    updateCard6();
 }
 
 
@@ -151,7 +154,7 @@ function updateCard3() {
               datasets: [{
                   label: 'Similarity % ',
                   data: similarities,
-                  backgroundColor: '#AB6C82',
+                  backgroundColor: 'rgba(171, 108, 130, 0.7)',//'#AB6C82',
                   // [
                   //   '#475C7A',
                   //   '#685D79',
@@ -165,7 +168,7 @@ function updateCard3() {
                   //   '#FCBB6D',
                   // ],
                   borderColor: '#AB6C82',
-                  borderWidth: 0,
+                  borderWidth: 2,
               }]
           },
           options: {
@@ -258,7 +261,7 @@ function updateCard4() {
               datasets: [{
                   label: 'Similarity % ',
                   data: similarities,
-                  backgroundColor: '#D8737F',
+                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
                   // [
                   //   '#475C7A',
                   //   '#685D79',
@@ -272,7 +275,7 @@ function updateCard4() {
                   //   '#FCBB6D',
                   // ],
                   borderColor: '#D8737F',
-                  borderWidth: 0,
+                  borderWidth: 2,
               }]
           },
           options: {
@@ -320,6 +323,88 @@ function updateCard4() {
 //function to update card 2
 function updateCard5() {
   $('#card5Content').html(window.patentId);
+}
+
+//function to update card 2
+function updateCard6() {
+  $('#card6Text').html('No Data Available');
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/yearwise_patent_details",
+      dataType: "JSON",
+  }).then(function(data) {
+      // $('#loadingText').html('');
+      window.yearwise_patent_count = data;
+      if(data.length!==0)
+      {
+        $('#card6Text').html('');
+        // convert keys to array to fit bar chart
+        var years = [];
+        var counts = [];
+        for(i=0;i<data.length;i++)
+        {
+          years.push(data[i]['year']);
+          counts.push(data[i]['count'])
+        }
+
+        var patentYearChart = document.getElementById('patentYearChart').getContext('2d');
+
+        //draw new chart only if chart doesn't already exist
+        if(window.patentYearDrawnChart!==undefined)
+        {
+          window.patentYearDrawnChart.destroy();
+        }
+        window.patentYearDrawnChart = new Chart(patentYearChart, {
+          type: 'line',
+          data: {
+              labels: years,
+              datasets: [{
+                  label: 'Years',
+                  data: counts,
+                  backgroundColor: 'rgba(216, 115, 127, 0.7)',//'#D8737F',
+                  borderColor: '#AB6C82',
+                  borderWidth: 2,
+              }]
+          },
+          options: {
+              legend: {
+                display: false,
+              },
+              labels: {
+                defaultFontFamily: "'Sen', sans-serif",
+              },
+              scales: {
+                  xAxes: [{
+                      gridLines: {
+                        color: '#ecf0f1',
+                        borderDash: [8, 6],
+                        lineWidth: 2,
+                      },
+                      ticks: {
+                          beginAtZero: true,
+                          display: true,
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Year'
+                      },
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      color: '#ecf0f1',
+                      borderDash: [8, 4],
+                      lineWidth: 2,
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Patent Count'
+                    },
+                  }],
+              }
+          }
+        });
+      }
+  });
 }
 
 

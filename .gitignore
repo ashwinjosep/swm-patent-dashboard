@@ -30,5 +30,6 @@ build/
 ### VS Code ###
 .vscode/
 
+/data/patentData/*
 /data/keywords/*
 /data/venv/*
