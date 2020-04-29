@@ -8,6 +8,7 @@ function initializerFunction() {
     Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
     Chart.defaults.global.defaultFontStyle = "bold";
     updateCard6();
+    hideDiv('card6');
 }
 
 
@@ -706,8 +707,45 @@ function changeSection(elt)
     }
   }
 
+  if(window.section==='sidenav_1')
+  {
+    hideDiv('card6');
+    showDiv('patent_table');
+    showDiv('card2');
+    showDiv('card3');
+    showDiv('card4');
+    showDiv('card5');
+    showDiv('card7');
+    showDiv('card8');
+  }
+  else {
+    showDiv('card6');
+    hideDiv('patent_table');
+    hideDiv('card2');
+    hideDiv('card3');
+    hideDiv('card4');
+    hideDiv('card5');
+    hideDiv('card7');
+    hideDiv('card8');
+  }
+
+
 // Make changes for tab change
   // setHeading(elt.innerText);
+}
+
+
+
+//function to hide card visibility
+function hideDiv(id) {
+  var x = document.getElementById(id);
+    x.style.display = "none";
+}
+
+//function to show card visibility
+function showDiv(id) {
+  var x = document.getElementById(id);
+    x.style.display = "flex";
 }
 
 

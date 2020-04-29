@@ -24,7 +24,7 @@ body {
 .grid-container {
   display: grid;
   grid-template-columns: 240px 1fr;
-  grid-template-rows: 50px 1fr 50px;
+  grid-template-rows: 50px 1fr 30px;
   grid-template-areas:
     "sidenav header"
     "sidenav main"
@@ -216,7 +216,7 @@ body {
   width: -moz-available;
   width: -webkit-fill-available;
   font-weight: 700;
-  padding: 20px 15px 20px 15px;
+  padding: 15px 15px 15px 15px;
   background: #475C7A;
   color: white;
   text-align: center;
@@ -225,7 +225,7 @@ body {
 .cardContent {
   width: -moz-available;
   width: -webkit-fill-available;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
 }
 
