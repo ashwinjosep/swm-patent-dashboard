@@ -7,6 +7,7 @@ function initializerFunction() {
     window.page = 1;
     Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
     Chart.defaults.global.defaultFontStyle = "bold";
+    updateCard6();
 }
 
 
@@ -53,7 +54,7 @@ function updatePatentsTable() {
     });
 
 
-    updateCard6();
+
 }
 
 
@@ -129,7 +130,7 @@ function updateCard3() {
         // convert keys to array to fit bar chart
         var patents = [];
         var similarities = [];
-        for(i=1;i<=5;i++)
+        for(i=1;i<=10;i++)
         {
           patentKey = "patent"+i;
           similarityKey = "similarity"+i;
@@ -239,7 +240,7 @@ function updateCard4() {
         // convert keys to array to fit bar chart
         var patents = [];
         var similarities = [];
-        for(i=1;i<=5;i++)
+        for(i=1;i<=10;i++)
         {
           patentKey = "patent"+i;
           similarityKey = "similarity"+i;

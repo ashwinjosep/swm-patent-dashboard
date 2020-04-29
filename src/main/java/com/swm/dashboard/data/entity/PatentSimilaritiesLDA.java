@@ -43,6 +43,116 @@ public class PatentSimilaritiesLDA {
     @Column(name = "similarity5")
     private float similarity5;
 
+    @Column(name = "patent6")
+    private String patent6;
+
+    @Column(name = "similarity6")
+    private float similarity6;
+
+    @Column(name = "patent7")
+    private String patent7;
+
+    @Column(name = "similarity7")
+    private float similarity7;
+
+    @Column(name = "patent8")
+    private String patent8;
+
+    @Column(name = "similarity8")
+    private float similarity8;
+
+    @Column(name = "patent9")
+    private String patent9;
+
+    @Column(name = "similarity9")
+    private float similarity9;
+
+    @Column(name = "patent10")
+    private String patent10;
+
+    @Column(name = "similarity10")
+    private float similarity10;
+
+    public String getPatent6() {
+        return patent6;
+    }
+
+    public void setPatent6(String patent6) {
+        this.patent6 = patent6;
+    }
+
+    public float getSimilarity6() {
+        return similarity6;
+    }
+
+    public void setSimilarity6(float similarity6) {
+        this.similarity6 = similarity6;
+    }
+
+    public String getPatent7() {
+        return patent7;
+    }
+
+    public void setPatent7(String patent7) {
+        this.patent7 = patent7;
+    }
+
+    public float getSimilarity7() {
+        return similarity7;
+    }
+
+    public void setSimilarity7(float similarity7) {
+        this.similarity7 = similarity7;
+    }
+
+    public String getPatent8() {
+        return patent8;
+    }
+
+    public void setPatent8(String patent8) {
+        this.patent8 = patent8;
+    }
+
+    public float getSimilarity8() {
+        return similarity8;
+    }
+
+    public void setSimilarity8(float similarity8) {
+        this.similarity8 = similarity8;
+    }
+
+    public String getPatent9() {
+        return patent9;
+    }
+
+    public void setPatent9(String patent9) {
+        this.patent9 = patent9;
+    }
+
+    public float getSimilarity9() {
+        return similarity9;
+    }
+
+    public void setSimilarity9(float similarity9) {
+        this.similarity9 = similarity9;
+    }
+
+    public String getPatent10() {
+        return patent10;
+    }
+
+    public void setPatent10(String patent10) {
+        this.patent10 = patent10;
+    }
+
+    public float getSimilarity10() {
+        return similarity10;
+    }
+
+    public void setSimilarity10(float similarity10) {
+        this.similarity10 = similarity10;
+    }
+
     public String getPatentId() {
         return patentId;
     }
