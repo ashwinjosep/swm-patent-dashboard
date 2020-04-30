@@ -5,10 +5,14 @@ function initializerFunction() {
     window.start = 0;
     window.limit = 20;
     window.page = 1;
+    window.year = 1963;
+    window.playing = false;
     Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
     Chart.defaults.global.defaultFontStyle = "bold";
     updateCard6();
+    updateCard9();
     hideDiv('card6');
+    hideDiv('card9');
 }
 
 
@@ -53,9 +57,6 @@ function updatePatentsTable() {
         " class='patentListItemId'>"+elt.patentId+"</div><div class='patentListItemCount'>"+
         elt.citationCount+"</div></li>"));
     });
-
-
-
 }
 
 
@@ -116,7 +117,6 @@ function updateCard2() {
 
 //function to update card 2
 function updateCard3() {
-  $('#card3Text').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_similarities_tfidf/",
@@ -146,74 +146,79 @@ function updateCard3() {
         //draw new chart only if chart doesn't already exist
         if(window.tfidfDrawnChart!==undefined)
         {
-          window.tfidfDrawnChart.destroy();
+          // window.tfidfDrawnChart.destroy();
+          patents.forEach((item, i) => {
+            window.tfidfDrawnChart.data.datasets[0].data[i] = similarities[i];
+            window.tfidfDrawnChart.data.labels[i] = patents[i];
+          });
+          window.tfidfDrawnChart.update();
         }
         else {
-
-        }
-        window.tfidfDrawnChart = new Chart(tfidfChart, {
-          type: 'horizontalBar',
-          data: {
-              labels: patents,
-              datasets: [{
-                  label: 'Similarity % ',
-                  data: similarities,
-                  backgroundColor: 'rgba(171, 108, 130, 0.7)',//'#AB6C82',
-                  // [
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  // ],
-                  borderColor: '#AB6C82',
-                  borderWidth: 2,
-              }]
-          },
-          options: {
-              legend: {
-                display: false,
-              },
-              labels: {
-                defaultFontFamily: "'Sen', sans-serif",
-              },
-              scales: {
-                  xAxes: [{
-                      ticks: {
-                          beginAtZero: true,
-                          suggestedMax: 100,
+          window.tfidfDrawnChart = new Chart(tfidfChart, {
+            type: 'horizontalBar',
+            data: {
+                labels: patents,
+                datasets: [{
+                    label: 'Similarity % ',
+                    data: similarities,
+                    backgroundColor: 'rgba(171, 108, 130, 0.7)',//'#AB6C82',
+                    // [
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    // ],
+                    borderColor: '#AB6C82',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                legend: {
+                  display: false,
+                },
+                labels: {
+                  defaultFontFamily: "'Sen', sans-serif",
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 100,
+                            display: true,
+                            callback: function(label, index, labels) {
+                                return label+'%';
+                            },
+                        },
+                        gridLines: {
+                          color: '#ecf0f1',
+                          borderDash: [8, 4],
+                          lineWidth: 2,
+                        },
+                        scaleLabel: {
                           display: true,
-                          callback: function(label, index, labels) {
-                              return label+'%';
-                          },
-                      },
+                          labelString: 'Similarity %'
+                        },
+                    }],
+                    yAxes: [{
                       gridLines: {
                         color: '#ecf0f1',
                         borderDash: [8, 4],
                         lineWidth: 2,
                       },
-                      scaleLabel: {
-                        display: true,
-                        labelString: 'Similarity %'
-                      },
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      color: '#ecf0f1',
-                      borderDash: [8, 4],
-                      lineWidth: 2,
-                    },
-                  }],
-              }
-          }
-        });
+                    }],
+                }
+            }
+          });
+        }
       }
       else {
+        $('#card3Text').html('No Data Available');
         if(window.tfidfDrawnChart!==undefined)
         {
           window.tfidfDrawnChart.destroy();
@@ -226,7 +231,6 @@ function updateCard3() {
 
 //function to update card 2
 function updateCard4() {
-  $('#card4Text').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_similarities_lda/",
@@ -256,71 +260,79 @@ function updateCard4() {
         //draw new chart only if chart doesn't already exist
         if(window.ldaDrawnChart!==undefined)
         {
-          window.ldaDrawnChart.destroy();
+          // window.ldaDrawnChart.destroy();
+          patents.forEach((item, i) => {
+            window.ldaDrawnChart.data.datasets[0].data[i] = similarities[i];
+            window.ldaDrawnChart.data.labels[i] = patents[i];
+          });
+          window.ldaDrawnChart.update();
         }
-        window.ldaDrawnChart = new Chart(ldaChart, {
-          type: 'horizontalBar',
-          data: {
-              labels: patents,
-              datasets: [{
-                  label: 'Similarity % ',
-                  data: similarities,
-                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                  // [
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  // ],
-                  borderColor: '#D8737F',
-                  borderWidth: 2,
-              }]
-          },
-          options: {
-              legend: {
-                display: false,
-              },
-              labels: {
-                defaultFontFamily: "'Sen', sans-serif",
-              },
-              scales: {
-                  xAxes: [{
+        else {
+          window.ldaDrawnChart = new Chart(ldaChart, {
+            type: 'horizontalBar',
+            data: {
+                labels: patents,
+                datasets: [{
+                    label: 'Similarity % ',
+                    data: similarities,
+                    backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                    // [
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    // ],
+                    borderColor: '#D8737F',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                legend: {
+                  display: false,
+                },
+                labels: {
+                  defaultFontFamily: "'Sen', sans-serif",
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                          color: '#ecf0f1',
+                          borderDash: [8, 6],
+                          lineWidth: 2,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 100,
+                            display: true,
+                            callback: function(label, index, labels) {
+                                return label+'%';
+                            },
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: 'Similarity %'
+                        },
+                    }],
+                    yAxes: [{
                       gridLines: {
                         color: '#ecf0f1',
-                        borderDash: [8, 6],
+                        borderDash: [8, 4],
                         lineWidth: 2,
                       },
-                      ticks: {
-                          beginAtZero: true,
-                          suggestedMax: 100,
-                          display: true,
-                          callback: function(label, index, labels) {
-                              return label+'%';
-                          },
-                      },
-                      scaleLabel: {
-                        display: true,
-                        labelString: 'Similarity %'
-                      },
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      color: '#ecf0f1',
-                      borderDash: [8, 4],
-                      lineWidth: 2,
-                    },
-                  }],
-              }
-          }
-        });
+                    }],
+                }
+            }
+          });
+        }
       }
       else {
+        $('#card4Text').html('No Data Available');
         if(window.ldaDrawnChart!==undefined)
         {
           window.ldaDrawnChart.destroy();
@@ -332,7 +344,6 @@ function updateCard4() {
 
 //function to update card 7
 function updateCard7() {
-  $('#card7Text').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_similarities_embeddings/",
@@ -362,70 +373,78 @@ function updateCard7() {
         //draw new chart only if chart doesn't already exist
         if(window.embeddingDrawnChart!==undefined)
         {
-          window.embeddingDrawnChart.destroy();
+          // window.embeddingDrawnChart.destroy();
+          patents.forEach((item, i) => {
+            window.embeddingDrawnChart.data.datasets[0].data[i] = similarities[i];
+            window.embeddingDrawnChart.data.labels[i] = patents[i];
+          });
+          window.embeddingDrawnChart.update();
         }
-        window.embeddingDrawnChart = new Chart(embeddingChart, {
-          type: 'horizontalBar',
-          data: {
-              labels: patents,
-              datasets: [{
-                  label: 'Euclidean Distance',
-                  data: similarities,
-                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                  // [
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  // ],
-                  borderColor: '#D8737F',
-                  borderWidth: 2,
-              }]
-          },
-          options: {
-              legend: {
-                display: false,
-              },
-              labels: {
-                defaultFontFamily: "'Sen', sans-serif",
-              },
-              scales: {
-                  xAxes: [{
+        else {
+          window.embeddingDrawnChart = new Chart(embeddingChart, {
+            type: 'horizontalBar',
+            data: {
+                labels: patents,
+                datasets: [{
+                    label: 'Euclidean Distance',
+                    data: similarities,
+                    backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                    // [
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    // ],
+                    borderColor: '#D8737F',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                legend: {
+                  display: false,
+                },
+                labels: {
+                  defaultFontFamily: "'Sen', sans-serif",
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                          color: '#ecf0f1',
+                          borderDash: [8, 6],
+                          lineWidth: 2,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            display: true,
+                            // callback: function(label, index, labels) {
+                            //     return label+'%';
+                            // },
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: 'Euclidean Distance'
+                        },
+                    }],
+                    yAxes: [{
                       gridLines: {
                         color: '#ecf0f1',
-                        borderDash: [8, 6],
+                        borderDash: [8, 4],
                         lineWidth: 2,
                       },
-                      ticks: {
-                          beginAtZero: true,
-                          display: true,
-                          // callback: function(label, index, labels) {
-                          //     return label+'%';
-                          // },
-                      },
-                      scaleLabel: {
-                        display: true,
-                        labelString: 'Euclidean Distance'
-                      },
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      color: '#ecf0f1',
-                      borderDash: [8, 4],
-                      lineWidth: 2,
-                    },
-                  }],
-              }
-          }
-        });
+                    }],
+                }
+            }
+          });
+        }
       }
       else {
+        $('#card7Text').html('No Data Available');
         if(window.embeddingDrawnChart!==undefined)
         {
           window.embeddingDrawnChart.destroy();
@@ -438,7 +457,6 @@ function updateCard7() {
 
 //function to update card 8
 function updateCard8() {
-  $('#card8Text').html('No Data Available');
   $.ajax({
       type:"GET",
       url: "http://localhost:8080/api/patent_similarities_bert/",
@@ -468,70 +486,78 @@ function updateCard8() {
         //draw new chart only if chart doesn't already exist
         if(window.bertDrawnChart!==undefined)
         {
-          window.bertDrawnChart.destroy();
+          // window.bertDrawnChart.destroy();
+          patents.forEach((item, i) => {
+            window.bertDrawnChart.data.datasets[0].data[i] = similarities[i];
+            window.bertDrawnChart.data.labels[i] = patents[i];
+          });
+          window.bertDrawnChart.update();
         }
-        window.bertDrawnChart = new Chart(bertChart, {
-          type: 'horizontalBar',
-          data: {
-              labels: patents,
-              datasets: [{
-                  label: 'Euclidean Distance',
-                  data: similarities,
-                  backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                  // [
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  //   '#475C7A',
-                  //   '#685D79',
-                  //   '#AB6C82',
-                  //   '#D8737F',
-                  //   '#FCBB6D',
-                  // ],
-                  borderColor: '#D8737F',
-                  borderWidth: 2,
-              }]
-          },
-          options: {
-              legend: {
-                display: false,
-              },
-              labels: {
-                defaultFontFamily: "'Sen', sans-serif",
-              },
-              scales: {
-                  xAxes: [{
+        else {
+          window.bertDrawnChart = new Chart(bertChart, {
+            type: 'horizontalBar',
+            data: {
+                labels: patents,
+                datasets: [{
+                    label: 'Euclidean Distance',
+                    data: similarities,
+                    backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                    // [
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    //   '#475C7A',
+                    //   '#685D79',
+                    //   '#AB6C82',
+                    //   '#D8737F',
+                    //   '#FCBB6D',
+                    // ],
+                    borderColor: '#D8737F',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                legend: {
+                  display: false,
+                },
+                labels: {
+                  defaultFontFamily: "'Sen', sans-serif",
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                          color: '#ecf0f1',
+                          borderDash: [8, 6],
+                          lineWidth: 2,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            display: true,
+                            // callback: function(label, index, labels) {
+                            //     return label+'%';
+                            // },
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: 'Euclidean Distance'
+                        },
+                    }],
+                    yAxes: [{
                       gridLines: {
                         color: '#ecf0f1',
-                        borderDash: [8, 6],
+                        borderDash: [8, 4],
                         lineWidth: 2,
                       },
-                      ticks: {
-                          beginAtZero: true,
-                          display: true,
-                          // callback: function(label, index, labels) {
-                          //     return label+'%';
-                          // },
-                      },
-                      scaleLabel: {
-                        display: true,
-                        labelString: 'Euclidean Distance'
-                      },
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      color: '#ecf0f1',
-                      borderDash: [8, 4],
-                      lineWidth: 2,
-                    },
-                  }],
-              }
-          }
-        });
+                    }],
+                }
+            }
+          });
+        }
       }
       else {
+        $('#card8Text').html('No Data Available');
         if(window.bertDrawnChart!==undefined)
         {
           window.bertDrawnChart.destroy();
@@ -547,7 +573,7 @@ function updateCard5() {
   $('#card5Content').html(window.patentId);
 }
 
-//function to update card 2
+//function to update card 6
 function updateCard6() {
   $('#card6Text').html('No Data Available');
   $.ajax({
@@ -581,7 +607,7 @@ function updateCard6() {
           data: {
               labels: years,
               datasets: [{
-                  label: 'Years',
+                  label: 'Patent Count',
                   data: counts,
                   backgroundColor: 'rgba(216, 115, 127, 0.7)',//'#D8737F',
                   borderColor: '#AB6C82',
@@ -627,6 +653,200 @@ function updateCard6() {
         });
       }
   });
+}
+
+
+//function to play simulation
+function playYearTopicSim()
+{
+  if(window.playing === false)
+  {
+    var sliderButton = document.getElementById("sliderButtonText");
+    sliderButton.classList.remove("fa-play");
+    sliderButton.classList.add("fa-pause");
+    window.playing = true;
+    window.timerId = setInterval(() => {
+      if(parseInt(window.year)>=1999)
+      {
+        window.year=1963;
+        clearInterval(window.timerId);
+        window.playing=false;
+        var sliderButton = document.getElementById("sliderButtonText");
+        sliderButton.classList.remove("fa-pause");
+        sliderButton.classList.add("fa-play");
+      }
+      else {
+        window.year++;
+      }
+      updateCard9()
+     }, 1000);
+    window.year = parseInt(document.getElementById('slider').value);
+    var timeoutDuration = (2000 - parseInt(window.year) + 2)*1000;
+    setTimeout(() => {
+      clearInterval(window.timerId);
+      window.playing=false;
+      var sliderButton = document.getElementById("sliderButtonText");
+      sliderButton.classList.remove("fa-pause");
+      sliderButton.classList.add("fa-play");
+    }, timeoutDuration);
+  }
+  else {
+    clearInterval(window.timerId);
+    window.playing=false;
+    var sliderButton = document.getElementById("sliderButtonText");
+    sliderButton.classList.remove("fa-pause");
+    sliderButton.classList.add("fa-play");
+  }
+}
+
+
+//function to update value along with slider
+function sliderUpdate() {
+  window.year = document.getElementById('slider').value;
+  $('#sliderValue').html(window.year);
+  updateCard9();
+}
+
+//function to update card 9
+function updateCard9() {
+  // $.ajax({
+  //     type:"GET",
+  //     url: "http://localhost:8080/api/yearwise_patent_details",
+  //     dataType: "JSON",
+  // }).then(function(data) {
+  //     // $('#loadingText').html('');
+  //     window.yearwise_patent_count = data;
+  //     if(data.length!==0)
+  //     {
+  //       $('#card6Text').html('');
+  //       // convert keys to array to fit bar chart
+  //       var years = [];
+  //       var counts = [];
+  //       for(i=0;i<data.length;i++)
+  //       {
+  //         years.push(data[i]['year']);
+  //         counts.push(data[i]['count'])
+  //       }
+  //
+  //       var patentYearChart = document.getElementById('patentYearChart').getContext('2d');
+  //
+  //       //draw new chart only if chart doesn't already exist
+  //       if(window.patentYearDrawnChart!==undefined)
+  //       {
+  //         window.patentYearDrawnChart.destroy();
+  //       }
+  //       window.patentYearDrawnChart = new Chart(patentYearChart, {
+  //         type: 'line',
+  //         data: {
+  //             labels: years,
+  //             datasets: [{
+  //                 label: 'Years',
+  //                 data: counts,
+  //                 backgroundColor: 'rgba(216, 115, 127, 0.7)',//'#D8737F',
+  //                 borderColor: '#AB6C82',
+  //                 borderWidth: 2,
+  //             }]
+  //         },
+  //         options: {
+  //             legend: {
+  //               display: false,
+  //             },
+  //             labels: {
+  //               defaultFontFamily: "'Sen', sans-serif",
+  //             },
+  //             scales: {
+  //                 xAxes: [{
+  //                     gridLines: {
+  //                       color: '#ecf0f1',
+  //                       borderDash: [8, 6],
+  //                       lineWidth: 2,
+  //                     },
+  //                     ticks: {
+  //                         beginAtZero: true,
+  //                         display: true,
+  //                     },
+  //                     scaleLabel: {
+  //                       display: true,
+  //                       labelString: 'Year'
+  //                     },
+  //                 }],
+  //                 yAxes: [{
+  //                   gridLines: {
+  //                     color: '#ecf0f1',
+  //                     borderDash: [8, 4],
+  //                     lineWidth: 2,
+  //                   },
+  //                   scaleLabel: {
+  //                     display: true,
+  //                     labelString: 'Patent Count'
+  //                   },
+  //                 }],
+  //             }
+  //         }
+  //       });
+  //     }
+  // });
+
+  //get chart
+  var topicYearChart = document.getElementById('topicYearChart').getContext('2d');
+
+  //todo : query data here
+
+  //define dataset
+  labels = ['Topic1','Topic2','Topic3','Topic4','Topic5','Topic6','Topic7','Topic8','Topic9','Topic10'];
+  topicData = [];
+
+  // update slider value
+  document.getElementById('slider').value = parseInt(window.year);
+  $('#sliderValue').html(window.year);
+
+  if(window.year%2==0)
+  {
+    topicData = [7, 4, 5, 6, 7, 7, 8, 3, 9, 10];
+  }
+  else {
+    topicData = [2, 3, 5, 6, 5, 9, 8, 3, 9, 10];
+  }
+
+  //draw new chart only if chart doesn't already exist
+  if(window.topicYearDrawnChart!==undefined)
+  {
+    topicData.forEach((item, i) => {
+      window.topicYearDrawnChart.data.datasets[0].data[i] = item;
+    });
+    window.topicYearDrawnChart.update();
+  }
+  else
+  {
+    window.topicYearDrawnChart = new Chart(topicYearChart, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          fill: 'origin',
+          labels: labels,
+          data: topicData,
+          backgroundColor: 'rgba(216, 115, 127, 0.7)',
+          borderColor: '#AB6C82',
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+        scale: {
+          angleLines: {
+            display: false
+          },
+          ticks: {
+            beginAtZero: true,
+            suggestedMin: 0,
+          },
+        }
+      },
+    });
+  }
 }
 
 
@@ -688,7 +908,6 @@ $(document).ready(function() {
   updatePatentsTable();
 });
 
-
 //function to change sections
 function changeSection(elt)
 {
@@ -709,7 +928,10 @@ function changeSection(elt)
 
   if(window.section==='sidenav_1')
   {
+    updateColumnCount(3);
     hideDiv('card6');
+    hideDiv('card9')
+    showDiv('patentTitle')
     showDiv('patent_table');
     showDiv('card2');
     showDiv('card3');
@@ -719,7 +941,10 @@ function changeSection(elt)
     showDiv('card8');
   }
   else {
+    updateColumnCount(2);
     showDiv('card6');
+    showDiv('card9');
+    hideDiv('patentTitle');
     hideDiv('patent_table');
     hideDiv('card2');
     hideDiv('card3');
@@ -729,11 +954,18 @@ function changeSection(elt)
     hideDiv('card8');
   }
 
-
 // Make changes for tab change
   // setHeading(elt.innerText);
 }
 
+
+
+//function to update column count
+function updateColumnCount(val)
+{
+  var x = document.getElementById('mainCards');
+  x.style.columnCount = val;
+}
 
 
 //function to hide card visibility

@@ -57,7 +57,7 @@
 <!--          </div>-->
 <!--        </div>-->
 
-        <div class="main-cards">
+        <div id='mainCards' class="main-cards">
 
           <div class="card" id="patent_table">
             <div class='patentListClassHeading'>
@@ -151,6 +151,19 @@
               <div id="card6Text">
                 No Data Available
               </div>
+            </div>
+          </div>
+          <div id="card9" class="card">
+            <div id='card9Heading' class='cardHeading'>Yearwise Topic Distribution</div>
+            <div id='card9Content' class="cardContent">
+              <canvas id='topicYearChart' class="barChart"></canvas>
+              <div id="yearSlider" class="yearSlider">
+                <button id="sliderButton" title="Play Animation" class="btn icon" onclick="playYearTopicSim()">
+                    <i id="sliderButtonText" class="fa fa-play"></i>
+                </button>
+                <input id="slider" type="range" min="1963" max="1999" oninput="sliderUpdate()" class="slider" id="myRange">
+              </div>
+              <div id='sliderValue' class="sliderValueText">1963</div>
             </div>
           </div>
         </div>
