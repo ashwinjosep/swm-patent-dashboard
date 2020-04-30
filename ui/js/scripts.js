@@ -9,11 +9,45 @@ function initializerFunction() {
     window.playing = false;
     Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
     Chart.defaults.global.defaultFontStyle = "bold";
+    getTopicData();
     updateCard6();
     getCard9Data();
     hideDiv('card6');
     hideDiv('card9');
     hideDiv('card10');
+}
+
+
+//function ot fetch topic dataset
+function getTopicData() {
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/get_topic_data",
+      dataType: "JSON",
+  }).then(function(data) {
+    window.topic_data_description = data;
+
+    var topicData = {};
+
+    for(i=0;i<10;i++)
+    {
+      topicKey = "topic"+i;
+      topic = {}
+      words = [];
+      probabilities = [];
+      for(j=0;j<5;j++)
+      {
+        index = i*5 + j;
+        words.push(data[index]['word']);
+        probabilities.push(data[index]['probability']);
+      }
+      topic['words'] = words;
+      topic['probabilities'] = probabilities;
+      topicData[topicKey] = topic;
+    }
+
+    window.topic_data_description = topicData;
+  });
 }
 
 
@@ -195,7 +229,7 @@ function updateCard3() {
                         },
                         scaleLabel: {
                           display: true,
-                          labelString: 'Similarity %'
+                          labelString: 'Similarity % (Cosine)'
                         },
                     }],
                     yAxes: [{
@@ -245,7 +279,7 @@ function updateCard4() {
             patentKey = "patent"+i;
             similarityKey = "similarity"+i;
             patents.push(data[patentKey]);
-            similarities.push(data[similarityKey]);
+            similarities.push(data[similarityKey].toFixed(4));
           }
 
           var ldaChart = document.getElementById('ldaChart').getContext('2d');
@@ -266,7 +300,7 @@ function updateCard4() {
               data: {
                   labels: patents,
                   datasets: [{
-                      label: 'Distance',
+                      label: 'Shannon Entropy',
                       data: similarities,
                       backgroundColor: 'rgba(216, 115, 127, 0.7)',
                       borderColor: '#D8737F',
@@ -297,7 +331,7 @@ function updateCard4() {
                           },
                           scaleLabel: {
                             display: true,
-                            labelString: 'Distance',
+                            labelString: 'Shannon Entropy',
                           },
                       }],
                       yAxes: [{
@@ -544,12 +578,12 @@ function updateCard5() {
   }).then(function(data) {
     window.patent_topic_distribution = data;
 
+    console.log(data);
     var topics = [];
     var probabilities = [];
 
     if(data.length!==0)
     {
-      window.patent_topic_distribution_flag = true;
       $('#card5Text').html('');
 
 
@@ -557,7 +591,7 @@ function updateCard5() {
       {
         topicKey = "topic"+i;
         topics.push(topicKey);
-        probabilities.push(data[topicKey]);
+        probabilities.push(data[topicKey].toFixed(4));
       }
 
       //get chart
@@ -597,7 +631,16 @@ function updateCard5() {
                 beginAtZero: true,
                 suggestedMin: 0,
               },
-            }
+            },
+            tooltips: {
+              enabled: true,
+              mode: 'single',
+              callbacks: {
+                  label: function(tooltipItems, data, index) {
+                      return window.topic_data_description['topic'+tooltipItems.index]['words'];
+                  }
+              },
+            },
           },
         });
       }
@@ -803,6 +846,15 @@ function updateCard9() {
         }],
       },
       options: {
+        tooltips: {
+          enabled: true,
+          mode: 'single',
+          callbacks: {
+              label: function(tooltipItems, data) {
+                  return window.topic_data_description['topic'+tooltipItems.index]['words'];
+              }
+          },
+        },
         legend: {
           display: false,
         },
