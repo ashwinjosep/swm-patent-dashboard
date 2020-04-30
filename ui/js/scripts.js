@@ -231,97 +231,100 @@ function updateCard4() {
           "patent_id": window.patentId,
       },
       dataType: "JSON",
-  }).then(function(data) {
-      // $('#loadingText').html('');
-      window.patent_similarities_lda = data;
-      if(data.length!==0)
-      {
-        $('#card4Text').html('');
-        // convert keys to array to fit bar chart
-        var patents = [];
-        var similarities = [];
-        for(i=1;i<=10;i++)
+      success:function(data) {
+        // $('#loadingText').html('');
+        window.patent_similarities_lda = data;
+        if(data.length!==0)
         {
-          patentKey = "patent"+i;
-          similarityKey = "similarity"+i;
-          patents.push(data[patentKey]);
-          similarities.push((data[similarityKey]*100).toFixed(4));
-        }
+          $('#card4Text').html('');
+          // convert keys to array to fit bar chart
+          var patents = [];
+          var similarities = [];
+          for(i=1;i<=10;i++)
+          {
+            patentKey = "patent"+i;
+            similarityKey = "similarity"+i;
+            patents.push(data[patentKey]);
+            similarities.push(data[similarityKey]);
+          }
 
-        var ldaChart = document.getElementById('ldaChart').getContext('2d');
+          var ldaChart = document.getElementById('ldaChart').getContext('2d');
 
-        //draw new chart only if chart doesn't already exist
-        if(window.ldaDrawnChart!==undefined)
-        {
-          // window.ldaDrawnChart.destroy();
-          patents.forEach((item, i) => {
-            window.ldaDrawnChart.data.datasets[0].data[i] = similarities[i];
-            window.ldaDrawnChart.data.labels[i] = patents[i];
-          });
-          window.ldaDrawnChart.update();
-        }
-        else {
-          window.ldaDrawnChart = new Chart(ldaChart, {
-            type: 'horizontalBar',
-            data: {
-                labels: patents,
-                datasets: [{
-                    label: 'Similarity % ',
-                    data: similarities,
-                    backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                    borderColor: '#D8737F',
-                    borderWidth: 2,
-                }]
-            },
-            options: {
-                // responsive: false,
-                legend: {
-                  display: false,
-                },
-                labels: {
-                  defaultFontFamily: "'Sen', sans-serif",
-                },
-                scales: {
-                    xAxes: [{
+          //draw new chart only if chart doesn't already exist
+          if(window.ldaDrawnChart!==undefined)
+          {
+            // window.ldaDrawnChart.destroy();
+            patents.forEach((item, i) => {
+              window.ldaDrawnChart.data.datasets[0].data[i] = similarities[i];
+              window.ldaDrawnChart.data.labels[i] = patents[i];
+            });
+            window.ldaDrawnChart.update();
+          }
+          else {
+            window.ldaDrawnChart = new Chart(ldaChart, {
+              type: 'horizontalBar',
+              data: {
+                  labels: patents,
+                  datasets: [{
+                      label: 'Distance',
+                      data: similarities,
+                      backgroundColor: 'rgba(216, 115, 127, 0.7)',
+                      borderColor: '#D8737F',
+                      borderWidth: 2,
+                  }]
+              },
+              options: {
+                  // responsive: false,
+                  legend: {
+                    display: false,
+                  },
+                  labels: {
+                    defaultFontFamily: "'Sen', sans-serif",
+                  },
+                  scales: {
+                      xAxes: [{
+                          gridLines: {
+                            color: '#ecf0f1',
+                            borderDash: [8, 6],
+                            lineWidth: 2,
+                          },
+                          ticks: {
+                              beginAtZero: true,
+                              display: true,
+                              // callback: function(label, index, labels) {
+                              //     return label+'%';
+                              // },
+                          },
+                          scaleLabel: {
+                            display: true,
+                            labelString: 'Distance',
+                          },
+                      }],
+                      yAxes: [{
                         gridLines: {
                           color: '#ecf0f1',
-                          borderDash: [8, 6],
+                          borderDash: [8, 4],
                           lineWidth: 2,
                         },
-                        ticks: {
-                            beginAtZero: true,
-                            suggestedMax: 100,
-                            display: true,
-                            callback: function(label, index, labels) {
-                                return label+'%';
-                            },
-                        },
-                        scaleLabel: {
-                          display: true,
-                          labelString: 'Similarity %'
-                        },
-                    }],
-                    yAxes: [{
-                      gridLines: {
-                        color: '#ecf0f1',
-                        borderDash: [8, 4],
-                        lineWidth: 2,
-                      },
-                    }],
-                }
-            }
-          });
+                      }],
+                  }
+              }
+            });
+          }
         }
-      }
-      else {
-        $('#card4Text').html('No Data Available');
-        if(window.ldaDrawnChart!==undefined)
-        {
-          window.ldaDrawnChart.destroy();
+        else {
+          $('#card4Text').html('No Data Available');
+          if(window.ldaDrawnChart!==undefined)
+          {
+            window.ldaDrawnChart.destroy();
+          }
         }
-      }
+    },
+    error: function(errorThrown)
+    {
+      console.log(errorThrown);
+    },
   });
-
 }
 
 
@@ -530,55 +533,83 @@ function updateCard8() {
 
 //function to update card 5
 function updateCard5() {
-  $('#card5Text').html('');
-  //get chart
-  var topicDistributionChart = document.getElementById('topicDistributionChart').getContext('2d');
 
-  //todo : query data here
-
-  //define dataset
-  labels = ['Topic1','Topic2','Topic3','Topic4','Topic5','Topic6','Topic7','Topic8','Topic9','Topic10'];
-  topicData = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2];
-
-  //draw new chart only if chart doesn't already exist
-  if(window.topicDistributionDrawnChart!==undefined)
-  {
-    topicData.forEach((item, i) => {
-      window.topicDistributionDrawnChart.data.datasets[0].data[i] = item;
-    });
-    window.topicDistributionDrawnChart.update();
-  }
-  else
-  {
-    window.topicDistributionDrawnChart = new Chart(topicDistributionChart, {
-      type: 'radar',
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080/api/patent_topics/",
       data: {
-        labels: labels,
-        datasets: [{
-          fill: 'origin',
-          labels: false,
-          data: topicData,
-          backgroundColor: 'rgba(216, 115, 127, 0.7)',
-          borderColor: '#AB6C82',
-          borderWidth: 2,
-        }],
+          "patent_id": window.patentId,
       },
-      options: {
-        legend: {
-          display: false,
-        },
-        scale: {
-          angleLines: {
-            display: false
+      dataType: "JSON",
+  }).then(function(data) {
+    window.patent_topic_distribution = data;
+
+    var topics = [];
+    var probabilities = [];
+
+    if(data.length!==0)
+    {
+      window.patent_topic_distribution_flag = true;
+      $('#card5Text').html('');
+
+
+      for(i=0;i<10;i++)
+      {
+        topicKey = "topic"+i;
+        topics.push(topicKey);
+        probabilities.push(data[topicKey]);
+      }
+
+      //get chart
+      var topicDistributionChart = document.getElementById('topicDistributionChart');
+
+      //draw new chart only if chart doesn't already exist
+      if(window.topicDistributionDrawnChart!=undefined)
+      {
+        probabilities.forEach((item, i) => {
+          window.topicDistributionDrawnChart.data.datasets[0].data[i] = item;
+        });
+        window.topicDistributionDrawnChart.update();
+      }
+      else
+      {
+        window.topicDistributionDrawnChart = new Chart(topicDistributionChart, {
+          type: 'radar',
+          data: {
+            labels: topics,
+            datasets: [{
+              fill: 'origin',
+              data: probabilities,
+              backgroundColor: 'rgba(216, 115, 127, 0.7)',
+              borderColor: '#AB6C82',
+              borderWidth: 2,
+            }],
           },
-          ticks: {
-            beginAtZero: true,
-            suggestedMin: 0,
+          options: {
+            legend: {
+              display: false,
+            },
+            scale: {
+              angleLines: {
+                display: false
+              },
+              ticks: {
+                beginAtZero: true,
+                suggestedMin: 0,
+              },
+            }
           },
-        }
-      },
-    });
-  }
+        });
+      }
+    }
+    else {
+      $('#card5Text').html('No Data Available');
+      if(window.topicDistributionDrawnChart!=undefined)
+      {
+        window.topicDistributionDrawnChart.destroy();
+      }
+    }
+  });
 }
 
 //function to update card 6
@@ -678,6 +709,7 @@ function playYearTopicSim()
       if(parseInt(window.year)>=1999)
       {
         window.year=1963;
+        updateCard9();
         clearInterval(window.timerId);
         window.playing=false;
         var sliderButton = document.getElementById("sliderButtonText");
@@ -685,7 +717,6 @@ function playYearTopicSim()
         sliderButton.classList.add("fa-play");
       }
       else {
-
         window.year++;
       }
       updateCard9()

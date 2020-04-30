@@ -5,6 +5,7 @@ import mysql.connector as conn
 import time
 import json
 import math
+from functools import cmp_to_key
 
 # get database connection
 try:
@@ -208,93 +209,117 @@ cursor = connection.cursor()
 # stop_time = time.time()
 # print("Execution time", stop_time-start_time)
 
-# # Logic for inserting into patent_similarities_lda table
-# # define insert query
-# insert_query = 	"insert into patent_similarities_lda (patent_id, "
-# for i in range(1, 11):
-# 	insert_query = insert_query + "patent" + str(i) + ", similarity" + str(i) + ", "
-# insert_query = insert_query[:-2] + ") values(%(patent_id)s,"
-# for i in range(1, 11):
-# 	insert_query = insert_query + "%(patent" + str(i) + ")s, %(similarity" + str(i) + ")s, "
-# insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, "
-# for i in range(1, 11):
-# 	insert_query = insert_query + "patent" + str(i) +"= %(patent" + str(i) + ")s, "
-# 	insert_query = insert_query + "similarity" + str(i) +"= %(similarity" + str(i) + ")s, "
-# insert_query = insert_query[:-2] + ";"
 
-# # # record start time
-# start_time = time.time()
 
-# file = "lda_similarities2.csv"
+# function to compare patent and similarity tuples
+def compare_patent_tuples(x, y):
+	val = float(x[1])-float(y[1])
+	if val > 0:
+		return 1
+	elif val == 0:
+		return 0
+	else: 
+		return -1
 
-# # read csv file and get contents
-# with open(file, 'r') as csv_file:
-# 	csv_reader = csv.reader(csv_file)
 
-# 	# remove header
-# 	next(csv_reader)
+# Logic for inserting into patent_similarities_lda table
+# define insert query
+insert_query = 	"insert into patent_similarities_lda (patent_id, "
+for i in range(1, 11):
+	insert_query = insert_query + "patent" + str(i) + ", similarity" + str(i) + ", "
+insert_query = insert_query[:-2] + ") values(%(patent_id)s,"
+for i in range(1, 11):
+	insert_query = insert_query + "%(patent" + str(i) + ")s, %(similarity" + str(i) + ")s, "
+insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, "
+for i in range(1, 11):
+	insert_query = insert_query + "patent" + str(i) +"= %(patent" + str(i) + ")s, "
+	insert_query = insert_query + "similarity" + str(i) +"= %(similarity" + str(i) + ")s, "
+insert_query = insert_query[:-2] + ";"
 
-# 	for row in csv_reader:
-# 		patent_id = "US"+row[0].strip()+"A"
-# 		patent1 = "US"+row[1].strip().replace('\'','')+"A"
-# 		similarity1 = row[2].strip().replace('\'','')
-# 		patent2 = "US"+row[3].strip().replace('\'','')+"A"
-# 		similarity2 = row[4].strip().replace('\'','')
-# 		patent3 = "US"+row[5].strip().replace('\'','')+"A"
-# 		similarity3 = row[6].strip().replace('\'','')
-# 		patent4 = "US"+row[7].strip().replace('\'','')+"A"
-# 		similarity4 = row[8].strip().replace('\'','')
-# 		patent5 = "US"+row[9].strip().replace('\'','')+"A"
-# 		similarity5 = row[10].strip().replace('\'','')
-# 		patent6 = "US"+row[11].strip().replace('\'','')+"A"
-# 		similarity6 = row[12].strip().replace('\'','')
-# 		patent7 = "US"+row[13].strip().replace('\'','')+"A"
-# 		similarity7 = row[14].strip().replace('\'','')
-# 		patent8 = "US"+row[15].strip().replace('\'','')+"A"
-# 		similarity8 = row[16].strip().replace('\'','')
-# 		patent9 = "US"+row[17].strip().replace('\'','')+"A"
-# 		similarity9 = row[18].strip().replace('\'','')
-# 		patent10 = "US"+row[19].strip().replace('\'','')+"A"
-# 		similarity10 = row[20].strip().replace('\'','')
+# # record start time
+start_time = time.time()
 
-# 		# make data for insert query
-# 		insert_query_data = {
-# 			'patent_id': patent_id,
-# 			'patent1': patent1,
-# 			'similarity1': similarity1,
-# 			'patent2': patent2,
-# 			'similarity2': similarity2,
-# 			'patent3': patent3,
-# 			'similarity3': similarity3,
-# 			'patent4': patent4,
-# 			'similarity4': similarity4,
-# 			'patent5': patent5,
-# 			'similarity5': similarity5,
-# 			'patent6': patent6,
-# 			'similarity6': similarity6,
-# 			'patent7': patent7,
-# 			'similarity7': similarity7,
-# 			'patent8': patent8,
-# 			'similarity8': similarity8,
-# 			'patent9': patent9,
-# 			'similarity9': similarity9,
-# 			'patent10': patent10,
-# 			'similarity10': similarity10,
-# 		}
+file = "lda_similarities_final.csv"
 
-# 		# printing for log purposes
-# 		print(patent_id)
+# read csv file and get contents
+with open(file, 'r') as csv_file:
+	csv_reader = csv.reader(csv_file)
 
-# 		# execute the insert query
-# 		cursor.execute(insert_query, insert_query_data)
-# 		connection.commit()
+	for row in csv_reader:
+		patent_tuple_list = []
+		
+		patent_id = "US"+row[0].strip()+"A"
+		patent1 = "US"+row[1].strip().replace('\'','')+"A"
+		similarity1 = row[2].strip().replace('\'','')
+		patent_tuple_list.append((patent1, similarity1))
+		patent2 = "US"+row[3].strip().replace('\'','')+"A"
+		similarity2 = row[4].strip().replace('\'','')
+		patent_tuple_list.append((patent2, similarity2))
+		patent3 = "US"+row[5].strip().replace('\'','')+"A"
+		similarity3 = row[6].strip().replace('\'','')
+		patent_tuple_list.append((patent3, similarity3))
+		patent4 = "US"+row[7].strip().replace('\'','')+"A"
+		similarity4 = row[8].strip().replace('\'','')
+		patent_tuple_list.append((patent4, similarity4))
+		patent5 = "US"+row[9].strip().replace('\'','')+"A"
+		similarity5 = row[10].strip().replace('\'','')
+		patent_tuple_list.append((patent5, similarity5))
+		patent6 = "US"+row[11].strip().replace('\'','')+"A"
+		similarity6 = row[12].strip().replace('\'','')
+		patent_tuple_list.append((patent6, similarity6))
+		patent7 = "US"+row[13].strip().replace('\'','')+"A"
+		similarity7 = row[14].strip().replace('\'','')
+		patent_tuple_list.append((patent7, similarity7))
+		patent8 = "US"+row[15].strip().replace('\'','')+"A"
+		similarity8 = row[16].strip().replace('\'','')
+		patent_tuple_list.append((patent8, similarity8))
+		patent9 = "US"+row[17].strip().replace('\'','')+"A"
+		similarity9 = row[18].strip().replace('\'','')
+		patent_tuple_list.append((patent9, similarity9))
+		patent10 = "US"+row[19].strip().replace('\'','')+"A"
+		similarity10 = row[20].strip().replace('\'','')
+		patent_tuple_list.append((patent10, similarity10))
 
-# # close the mysql connection
-# connection.close()
+		patent_tuple_list = sorted(patent_tuple_list, key=cmp_to_key(compare_patent_tuples))
 
-# # get end time
-# stop_time = time.time()
-# print("Execution time", stop_time-start_time)
+		# make data for insert query
+		insert_query_data = {
+			'patent_id': patent_id,
+			'patent1': patent_tuple_list[0][0],
+			'similarity1': patent_tuple_list[0][1],
+			'patent2': patent_tuple_list[1][0],
+			'similarity2': patent_tuple_list[1][1],
+			'patent3': patent_tuple_list[2][0],
+			'similarity3': patent_tuple_list[2][1],
+			'patent4': patent_tuple_list[3][0],
+			'similarity4': patent_tuple_list[3][1],
+			'patent5': patent_tuple_list[4][0],
+			'similarity5': patent_tuple_list[4][1],
+			'patent6': patent_tuple_list[5][0],
+			'similarity6': patent_tuple_list[5][1],
+			'patent7': patent_tuple_list[6][0],
+			'similarity7': patent_tuple_list[6][1],
+			'patent8': patent_tuple_list[7][0],
+			'similarity8': patent_tuple_list[7][1],
+			'patent9': patent_tuple_list[8][0],
+			'similarity9': patent_tuple_list[8][1],
+			'patent10': patent_tuple_list[9][0],
+			'similarity10': patent_tuple_list[9][1],
+		}
+
+		# printing for log purposes
+		print(patent_id)
+
+		# execute the insert query
+		cursor.execute(insert_query, insert_query_data)
+		connection.commit()
+
+# close the mysql connection
+connection.close()
+
+# get end time
+stop_time = time.time()
+print("Execution time", stop_time-start_time)
 
 # # Logic for inserting into patent_details table
 # # define insert query
@@ -502,76 +527,76 @@ cursor = connection.cursor()
 # connection.close()
 
 
-start_time = time.time()
+# start_time = time.time()
 
-patent_year_dict = {}
-file = "./patentData/apat63_99.csv"
-# read csv file and get contents
-with open(file, 'r') as csv_file:
-	csv_reader = csv.reader(csv_file)
+# patent_year_dict = {}
+# file = "./patentData/apat63_99.csv"
+# # read csv file and get contents
+# with open(file, 'r') as csv_file:
+# 	csv_reader = csv.reader(csv_file)
 
-	# remove header
-	next(csv_reader)
+# 	# remove header
+# 	next(csv_reader)
 
-	for row in csv_reader:
+# 	for row in csv_reader:
 
-		patent_id = row[0].strip()
-		year = row[1].strip()
+# 		patent_id = row[0].strip()
+# 		year = row[1].strip()
 
-		patent_year_dict[patent_id] = year
+# 		patent_year_dict[patent_id] = year
 
-# get end time
-stop_time = time.time()
-print("Execution time for reading years", stop_time-start_time)
+# # get end time
+# stop_time = time.time()
+# print("Execution time for reading years", stop_time-start_time)
 
-# print(patent_year_dict)
+# # print(patent_year_dict)
 
-# Logic for inserting into patent_topics table
-# define insert query
-insert_query = 	"insert into patent_topics (patent_id, year, "
-for i in range(0, 10):
-	insert_query = insert_query + "topic" + str(i) + ", "
-insert_query = insert_query[:-2] + ") values(%(patent_id)s, %(year)s, "
-for i in range(0, 10):
-	insert_query = insert_query + "%(topic" + str(i) + ")s, "
-insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, year = %(year)s, "
-for i in range(0, 9):
-	insert_query = insert_query + "topic" + str(i) +"= %(topic" + str(i) + ")s, "
-insert_query = insert_query[:-2] + ";"
+# # Logic for inserting into patent_topics table
+# # define insert query
+# insert_query = 	"insert into patent_topics (patent_id, year, "
+# for i in range(0, 10):
+# 	insert_query = insert_query + "topic" + str(i) + ", "
+# insert_query = insert_query[:-2] + ") values(%(patent_id)s, %(year)s, "
+# for i in range(0, 10):
+# 	insert_query = insert_query + "%(topic" + str(i) + ")s, "
+# insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, year = %(year)s, "
+# for i in range(0, 9):
+# 	insert_query = insert_query + "topic" + str(i) +"= %(topic" + str(i) + ")s, "
+# insert_query = insert_query[:-2] + ";"
 
-# record start time
-start_time = time.time()
+# # record start time
+# start_time = time.time()
 
-file = "doc_topic_distribution.csv"
+# file = "doc_topic_distribution.csv"
 
-insert_query_data = {}
+# insert_query_data = {}
 
-# read json file and get contents
-with open(file, 'r') as csv_file:
-	csv_reader = csv.reader(csv_file)
-	count = 0
+# # read json file and get contents
+# with open(file, 'r') as csv_file:
+# 	csv_reader = csv.reader(csv_file)
+# 	count = 0
 
-	for row in csv_reader:
-		if row[0].strip() in patent_year_dict:
+# 	for row in csv_reader:
+# 		if row[0].strip() in patent_year_dict:
 
-			insert_query_data['patent_id'] = "US"+row[0].strip()+"A"
-			insert_query_data['year'] = patent_year_dict[row[0].strip()]
-			for i in range(0, 10):
-				index = str(i)
-				insert_query_data['topic'+index] = row[i+1]
+# 			insert_query_data['patent_id'] = "US"+row[0].strip()+"A"
+# 			insert_query_data['year'] = patent_year_dict[row[0].strip()]
+# 			for i in range(0, 10):
+# 				index = str(i)
+# 				insert_query_data['topic'+index] = row[i+1]
 
-			# execute the insert query
-			cursor.execute(insert_query, insert_query_data)
-			connection.commit()
+# 			# execute the insert query
+# 			cursor.execute(insert_query, insert_query_data)
+# 			connection.commit()
 
-			# printing for log purposes
-			count = count + 1
-			if count%100==0: 
-				print(insert_query_data['patent_id'], count)
+# 			# printing for log purposes
+# 			count = count + 1
+# 			if count%100==0: 
+# 				print(insert_query_data['patent_id'], count)
 
-# close the mysql connection
-connection.close()
+# # close the mysql connection
+# connection.close()
 
-# get end time
-stop_time = time.time()
+# # get end time
+# stop_time = time.time()
 # print("Execution time", stop_time-start_time)
