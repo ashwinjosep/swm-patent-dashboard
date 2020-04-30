@@ -22,57 +22,57 @@ cursor = connection.cursor()
 
 
 # logic for inserting into PATENT_KEYWORDS table
-# # define insert query
-# insert_query = "insert into patent_keywords (patent_id, keyword) values(%(patent_id)s," + \
-#                " %(keyword)s) on duplicate key update patent_id = %(patent_id)s, keyword = %(keyword)s;"
+# define insert query
+insert_query = "insert into patent_keywords (patent_id, keyword) values(%(patent_id)s," + \
+               " %(keyword)s) on duplicate key update patent_id = %(patent_id)s, keyword = %(keyword)s;"
 
-# # get list of all csv files in keywords folder
-# keyword_file_list = glob.glob("keywords/*.csv")
+# get list of all csv files in keywords folder
+keyword_file_list = glob.glob("keywords/*.csv")
 
-# # record start time
-# start_time = time.time()
+# record start time
+start_time = time.time()
 
-# # read each file and get contents
-# for file in keyword_file_list:
-#     with open(file, 'r') as csv_file:
-#         keyword = ""
-#         patent_id = re.search('/(.+?)_', file).group(1).strip()
-#         csv_reader = csv.reader(csv_file)
+# read each file and get contents
+for file in keyword_file_list:
+    with open(file, 'r') as csv_file:
+        keyword = ""
+        patent_id = re.search('/(.+?)_', file).group(1).strip()
+        csv_reader = csv.reader(csv_file)
 
-#         # get only top 10 keywords
-#         count = 0
+        # get only top 10 keywords
+        count = 0
 
-#         # remove header
-#         next(csv_reader)
+        # remove header
+        next(csv_reader)
 
-#         for row in csv_reader:
-#             keyword = keyword + row[0].strip().lower() + ","
-#             count = count + 1
-#             if count >= 10:
-#                 break
+        for row in csv_reader:
+            keyword = keyword + row[0].strip().lower() + ","
+            count = count + 1
+            if count >= 10:
+                break
 
-#         # remove last comma
-#         keyword = keyword[:-1]
+        # remove last comma
+        keyword = keyword[:-1]
 
-#         # make data for insert query
-#         insert_query_data = {
-#             'patent_id': patent_id,
-#             'keyword': keyword,
-#         }
+        # make data for insert query
+        insert_query_data = {
+            'patent_id': patent_id,
+            'keyword': keyword,
+        }
 
-#         # printing for log purposes
-#         print(insert_query_data)
+        # printing for log purposes
+        print(insert_query_data['patent_id'])
 
-#         # execute the insert query
-#         cursor.execute(insert_query, insert_query_data)
-#         connection.commit()
+        # execute the insert query
+        cursor.execute(insert_query, insert_query_data)
+        connection.commit()
 
-# # close the mysql connection
-# connection.close()
+# close the mysql connection
+connection.close()
 
-# # get end time
-# stop_time = time.time()
-# print("Execution time", stop_time-start_time)
+# get end time
+stop_time = time.time()
+print("Execution time", stop_time-start_time)
 
 
 # # Logic for inserting into patent_citations table
@@ -413,51 +413,51 @@ cursor = connection.cursor()
 # print("Execution time", stop_time-start_time)
 
 
-# Logic for inserting into patent_similarities_bert table
-# define insert query
-insert_query = 	"insert into patent_similarities_bert (patent_id, "
-for i in range(1, 11):
-	insert_query = insert_query + "patent" + str(i) + ", similarity" + str(i) + ", "
-insert_query = insert_query[:-2] + ") values(%(patent_id)s,"
-for i in range(1, 11):
-	insert_query = insert_query + "%(patent" + str(i) + ")s, %(similarity" + str(i) + ")s, "
-insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, "
-for i in range(1, 11):
-	insert_query = insert_query + "patent" + str(i) +"= %(patent" + str(i) + ")s, "
-	insert_query = insert_query + "similarity" + str(i) +"= %(similarity" + str(i) + ")s, "
-insert_query = insert_query[:-2] + ";"
+# # Logic for inserting into patent_similarities_bert table
+# # define insert query
+# insert_query = 	"insert into patent_similarities_bert (patent_id, "
+# for i in range(1, 11):
+# 	insert_query = insert_query + "patent" + str(i) + ", similarity" + str(i) + ", "
+# insert_query = insert_query[:-2] + ") values(%(patent_id)s,"
+# for i in range(1, 11):
+# 	insert_query = insert_query + "%(patent" + str(i) + ")s, %(similarity" + str(i) + ")s, "
+# insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, "
+# for i in range(1, 11):
+# 	insert_query = insert_query + "patent" + str(i) +"= %(patent" + str(i) + ")s, "
+# 	insert_query = insert_query + "similarity" + str(i) +"= %(similarity" + str(i) + ")s, "
+# insert_query = insert_query[:-2] + ";"
 
-# record start time
-start_time = time.time()
+# # record start time
+# start_time = time.time()
 
-file = "bert_sentence_embedding_nearest_10_measures.json"
+# file = "bert_sentence_embedding_nearest_10_measures.json"
 
-insert_query_data = {}
+# insert_query_data = {}
 
-# read json file and get contents
-with open(file, 'r') as json_file:
-	data = json.load(json_file)
-	for key in data:
+# # read json file and get contents
+# with open(file, 'r') as json_file:
+# 	data = json.load(json_file)
+# 	for key in data:
 
-		values = data[key]
+# 		values = data[key]
 
-		insert_query_data['patent_id'] = "US"+key.strip()+"A"
-		for i in range(0, len(values)):
+# 		insert_query_data['patent_id'] = "US"+key.strip()+"A"
+# 		for i in range(0, len(values)):
 
-			index = str(i + 1)
-			insert_query_data['patent'+index] = "US"+values[i][0].strip()+"A"
-			insert_query_data['similarity'+index] = round(values[i][1], 8)
+# 			index = str(i + 1)
+# 			insert_query_data['patent'+index] = "US"+values[i][0].strip()+"A"
+# 			insert_query_data['similarity'+index] = round(values[i][1], 8)
 
-		# printing for log purposes
-		print(insert_query_data['patent_id'])
+# 		# printing for log purposes
+# 		print(insert_query_data['patent_id'])
 
-		# execute the insert query
-		cursor.execute(insert_query, insert_query_data)
-		connection.commit()
+# 		# execute the insert query
+# 		cursor.execute(insert_query, insert_query_data)
+# 		connection.commit()
 
-# close the mysql connection
-connection.close()
+# # close the mysql connection
+# connection.close()
 
-# get end time
-stop_time = time.time()
-print("Execution time", stop_time-start_time)
+# # get end time
+# stop_time = time.time()
+# print("Execution time", stop_time-start_time)

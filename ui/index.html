@@ -13,7 +13,7 @@
     <div class="grid-container">
       <header class="header">
         <div class="header__1">Semantic Web Mining Dashboard</div>
-        <div id="patentTitle" class="header__2"></div>
+        <div id="patentTitle" class="header__2"><a id="patentTitleLink" target="_blank" href=""></a></div>
 <!--        <div class="header__3">Page 3</div>-->
 <!--        <div class="header__4">Page 4</div>-->
       </header>
@@ -22,6 +22,7 @@
         <ul class="sidenav__list" id="sidenav__list">
           <li class="sidenav__list-item ripple active_sidenav" id="sidenav_1" onclick="changeSection(sidenav_1)">Patent Viewer</li>
           <li class="sidenav__list-item ripple" id="sidenav_2" onclick="changeSection(sidenav_2)">Topic Viewer</li>
+          <li class="sidenav__list-item ripple" id="sidenav_3" onclick="changeSection(sidenav_3)">Edge Prediction</li>
         </ul>
       </aside>
 
@@ -96,6 +97,14 @@
               </div>
             </div>
           </div>
+          <div id="card5" class="card">
+            <div id='card5Heading' class='cardHeading'>Topic Distribution (LDA)</div>
+            <div id='card5Content' class="cardContent">
+              <canvas id='topicDistributionChart' class="barChart"></canvas>
+              <div id="card5Text">
+                No Data Available
+              </div></div>
+          </div>
           <div id="card7" class="card">
             <div id='card7Heading' class='cardHeading'>Similar Patents (Vector Embeddings)</div>
             <div id='card7Content' class="cardContent">
@@ -110,14 +119,6 @@
             <div id='card3Content' class="cardContent">
               <canvas id='tfidfChart' class="barChart"></canvas>
               <div id="card3Text">
-                No Data Available
-              </div>
-            </div>
-          </div>
-          <div id="card2" class="card">
-            <div id='card2Heading' class='cardHeading'>Top Keywords</div>
-            <div id='card2Content' class="cardContent">
-              <div id="patentKeywordList" class="patentKeywordList">
                 No Data Available
               </div>
             </div>
@@ -140,9 +141,13 @@
               </div>
             </div>
           </div>
-          <div id="card5" class="card">
-            <div id='card5Heading' class='cardHeading'>Topic Distribution (LDA)</div>
-            <div id='card5Content' class="cardContent">No Data</div>
+          <div id="card2" class="card">
+            <div id='card2Heading' class='cardHeading'>Top Keywords</div>
+            <div id='card2Content' class="cardContent">
+              <div id="patentKeywordList" class="patentKeywordList">
+                No Data Available
+              </div>
+            </div>
           </div>
           <div id="card6" class="card">
             <div id='card6Heading' class='cardHeading'>Yearly Utility Patent Counts</div>
@@ -166,12 +171,22 @@
               <div id='sliderValue' class="sliderValueText">1963</div>
             </div>
           </div>
+          <div id="card10" class="card">
+            <div id='card10Content' class="cardContent">
+              <div id="patentInputBoxes" class="patentInputBoxes">
+                To Do
+              </div>
+              <div class="patentPredictions" id="patentPredictions">
+                Prediction
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
       <footer class="footer">
-<!--        <div class="footer__1">Link 1</div>-->
-<!--        <div class="footer__2">Link 2</div>-->
+       <div class="footer__1"><a href="https://snap.stanford.edu/data/cit-Patents.html" target="_blank">Snap Dataset</a></div>
+       <div class="footer__2"><a href="http://data.nber.org/patents/" target="_blank">NBER Patent Dataset</a></div>
 <!--        <div class="footer__3">Link 3</div>-->
 <!--        <div class="footer__4">Link 4</div>-->
       </footer>

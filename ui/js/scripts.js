@@ -3,7 +3,7 @@ function initializerFunction() {
     //set first sidenav as initial option
     window.section = "sidenav_1";
     window.start = 0;
-    window.limit = 20;
+    window.limit = 10;
     window.page = 1;
     window.year = 1963;
     window.playing = false;
@@ -13,6 +13,7 @@ function initializerFunction() {
     updateCard9();
     hideDiv('card6');
     hideDiv('card9');
+    hideDiv('card10');
 }
 
 
@@ -20,7 +21,7 @@ function initializerFunction() {
 function pageChange(inp) {
   if(inp.id==='n')
   {
-    if(window.page<50)
+    if(window.page<100)
       changePages(window.page+1);
   }
   else if (inp.id==='p') {
@@ -65,7 +66,10 @@ function updateChartsBasedOnPatent(elt) {
 
   //  set window.patent as the new element's id
   window.patentId = elt.id;
-  $('#patentTitle').html(window.patentId);
+  $('#patentTitleLink').html(window.patentId);
+  var patentTitleLink = document.getElementById('patentTitleLink');
+  var hrefText = "https://patents.google.com/patent/"+window.patentId;
+  patentTitleLink.href = hrefText;
 
   //  Switch selection
   var elements = document.getElementById("patentListUl");
@@ -162,23 +166,12 @@ function updateCard3() {
                     label: 'Similarity % ',
                     data: similarities,
                     backgroundColor: 'rgba(171, 108, 130, 0.7)',//'#AB6C82',
-                    // [
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    // ],
                     borderColor: '#AB6C82',
                     borderWidth: 2,
                 }]
             },
             options: {
+                // responsive: false,
                 legend: {
                   display: false,
                 },
@@ -276,23 +269,12 @@ function updateCard4() {
                     label: 'Similarity % ',
                     data: similarities,
                     backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                    // [
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    // ],
                     borderColor: '#D8737F',
                     borderWidth: 2,
                 }]
             },
             options: {
+                // responsive: false,
                 legend: {
                   display: false,
                 },
@@ -339,6 +321,7 @@ function updateCard4() {
         }
       }
   });
+
 }
 
 
@@ -389,23 +372,12 @@ function updateCard7() {
                     label: 'Euclidean Distance',
                     data: similarities,
                     backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                    // [
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    // ],
                     borderColor: '#D8737F',
                     borderWidth: 2,
                 }]
             },
             options: {
+                // responsive: false,
                 legend: {
                   display: false,
                 },
@@ -502,23 +474,12 @@ function updateCard8() {
                     label: 'Euclidean Distance',
                     data: similarities,
                     backgroundColor: 'rgba(216, 115, 127, 0.7)',
-                    // [
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    //   '#475C7A',
-                    //   '#685D79',
-                    //   '#AB6C82',
-                    //   '#D8737F',
-                    //   '#FCBB6D',
-                    // ],
                     borderColor: '#D8737F',
                     borderWidth: 2,
                 }]
             },
             options: {
+                // responsive: false,
                 legend: {
                   display: false,
                 },
@@ -567,10 +528,57 @@ function updateCard8() {
 }
 
 
-
-//function to update card 2
+//function to update card 5
 function updateCard5() {
-  $('#card5Content').html(window.patentId);
+  $('#card5Text').html('');
+  //get chart
+  var topicDistributionChart = document.getElementById('topicDistributionChart').getContext('2d');
+
+  //todo : query data here
+
+  //define dataset
+  labels = ['Topic1','Topic2','Topic3','Topic4','Topic5','Topic6','Topic7','Topic8','Topic9','Topic10'];
+  topicData = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2];
+
+  //draw new chart only if chart doesn't already exist
+  if(window.topicDistributionDrawnChart!==undefined)
+  {
+    topicData.forEach((item, i) => {
+      window.topicDistributionDrawnChart.data.datasets[0].data[i] = item;
+    });
+    window.topicDistributionDrawnChart.update();
+  }
+  else
+  {
+    window.topicDistributionDrawnChart = new Chart(topicDistributionChart, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          fill: 'origin',
+          labels: false,
+          data: topicData,
+          backgroundColor: 'rgba(216, 115, 127, 0.7)',
+          borderColor: '#AB6C82',
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+        scale: {
+          angleLines: {
+            display: false
+          },
+          ticks: {
+            beginAtZero: true,
+            suggestedMin: 0,
+          },
+        }
+      },
+    });
+  }
 }
 
 //function to update card 6
@@ -615,6 +623,7 @@ function updateCard6() {
               }]
           },
           options: {
+              // responsive: false,
               legend: {
                 display: false,
               },
@@ -861,9 +870,9 @@ function fillPageNumbers() {
     start = 1;
   }
 
-  if(start>45)
+  if(start>95)
   {
-    start = 46;
+    start = 96;
   }
   var end = start + 5;
   $('#searchNavList').html('')
@@ -929,9 +938,12 @@ function changeSection(elt)
   if(window.section==='sidenav_1')
   {
     updateColumnCount(3);
+
     hideDiv('card6');
-    hideDiv('card9')
-    showDiv('patentTitle')
+    hideDiv('card9');
+    hideDiv('card10');
+
+    showDiv('patentTitle');
     showDiv('patent_table');
     showDiv('card2');
     showDiv('card3');
@@ -940,10 +952,12 @@ function changeSection(elt)
     showDiv('card7');
     showDiv('card8');
   }
-  else {
+  else if(window.section==='sidenav_2'){
     updateColumnCount(2);
+
     showDiv('card6');
     showDiv('card9');
+
     hideDiv('patentTitle');
     hideDiv('patent_table');
     hideDiv('card2');
@@ -952,6 +966,23 @@ function changeSection(elt)
     hideDiv('card5');
     hideDiv('card7');
     hideDiv('card8');
+    hideDiv('card10');
+  }
+  else {
+    updateColumnCount(1);
+
+    showDiv('card10');
+
+    hideDiv('card2');
+    hideDiv('card3');
+    hideDiv('card4');
+    hideDiv('card5');
+    hideDiv('card6');
+    hideDiv('card7');
+    hideDiv('card8');
+    hideDiv('card9');
+    hideDiv('patentTitle');
+    hideDiv('patent_table');
   }
 
 // Make changes for tab change

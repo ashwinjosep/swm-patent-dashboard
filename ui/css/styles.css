@@ -6,7 +6,7 @@ body {
   font-family: 'Sen', sans-serif;
   font-weight: 400;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .icon {
@@ -24,7 +24,7 @@ body {
 .grid-container {
   display: grid;
   grid-template-columns: 240px 1fr;
-  grid-template-rows: 50px 1fr 30px;
+  grid-template-rows: 40px 1fr 30px;
   grid-template-areas:
     "sidenav header"
     "sidenav main"
@@ -39,8 +39,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 50px;
+  padding: 0 20px 0px 15px;
   font-weight: 700;
+  font-size: 14px;
 }
 
 .sidenav {
@@ -52,6 +53,11 @@ body {
 
 .main-header__heading {
   font-size: 18px;
+}
+
+.header__2 a {
+  text-decoration: none;
+  color: white;
 }
 
 .sidenav__list {
@@ -124,7 +130,7 @@ body {
 .card:first-child {
   height: auto;
   padding: 0px;
-  min-height: 620px;
+  min-height: 400px;
 }
 
 .card:nth-child(2) {
@@ -159,6 +165,12 @@ body {
   justify-content: space-between;
   padding: 0 20px;
   font-weight: 700;
+  font-size: 12px;
+}
+
+.footer a {
+  text-decoration: none;
+  color: white;
 }
 
 .yearSlider {
@@ -306,6 +318,7 @@ body {
 }
 
 .patentKeywordListItem {
+  font-size: 14px;
   padding: 5px;
   background-color: #e3e4e6;
   margin: 2px;
@@ -348,7 +361,7 @@ body {
 }
 
 .barChart {
-  height: 200px;
+  height: 250px;
   width: auto;
 }
 
@@ -399,4 +412,9 @@ body {
   width: auto;
   font-size: 16px; /* Set a font size */
   cursor: pointer; /* Mouse pointer on hover */
+}
+
+
+.patentInputBoxes {
+  height: 500px;
 }
