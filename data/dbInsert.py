@@ -21,58 +21,58 @@ except conn.Error as err:
 cursor = connection.cursor()
 
 
-# logic for inserting into PATENT_KEYWORDS table
-# define insert query
-insert_query = "insert into patent_keywords (patent_id, keyword) values(%(patent_id)s," + \
-               " %(keyword)s) on duplicate key update patent_id = %(patent_id)s, keyword = %(keyword)s;"
+# # logic for inserting into PATENT_KEYWORDS table
+# # define insert query
+# insert_query = "insert into patent_keywords (patent_id, keyword) values(%(patent_id)s," + \
+#                " %(keyword)s) on duplicate key update patent_id = %(patent_id)s, keyword = %(keyword)s;"
 
-# get list of all csv files in keywords folder
-keyword_file_list = glob.glob("keywords/*.csv")
+# # get list of all csv files in keywords folder
+# keyword_file_list = glob.glob("keywords/*.csv")
 
-# record start time
-start_time = time.time()
+# # record start time
+# start_time = time.time()
 
-# read each file and get contents
-for file in keyword_file_list:
-    with open(file, 'r') as csv_file:
-        keyword = ""
-        patent_id = re.search('/(.+?)_', file).group(1).strip()
-        csv_reader = csv.reader(csv_file)
+# # read each file and get contents
+# for file in keyword_file_list:
+#     with open(file, 'r') as csv_file:
+#         keyword = ""
+#         patent_id = re.search('/(.+?)_', file).group(1).strip()
+#         csv_reader = csv.reader(csv_file)
 
-        # get only top 10 keywords
-        count = 0
+#         # get only top 10 keywords
+#         count = 0
 
-        # remove header
-        next(csv_reader)
+#         # remove header
+#         next(csv_reader)
 
-        for row in csv_reader:
-            keyword = keyword + row[0].strip().lower() + ","
-            count = count + 1
-            if count >= 10:
-                break
+#         for row in csv_reader:
+#             keyword = keyword + row[0].strip().lower() + ","
+#             count = count + 1
+#             if count >= 10:
+#                 break
 
-        # remove last comma
-        keyword = keyword[:-1]
+#         # remove last comma
+#         keyword = keyword[:-1]
 
-        # make data for insert query
-        insert_query_data = {
-            'patent_id': patent_id,
-            'keyword': keyword,
-        }
+#         # make data for insert query
+#         insert_query_data = {
+#             'patent_id': patent_id,
+#             'keyword': keyword,
+#         }
 
-        # printing for log purposes
-        print(insert_query_data['patent_id'])
+#         # printing for log purposes
+#         print(insert_query_data['patent_id'])
 
-        # execute the insert query
-        cursor.execute(insert_query, insert_query_data)
-        connection.commit()
+#         # execute the insert query
+#         cursor.execute(insert_query, insert_query_data)
+#         connection.commit()
 
-# close the mysql connection
-connection.close()
+# # close the mysql connection
+# connection.close()
 
-# get end time
-stop_time = time.time()
-print("Execution time", stop_time-start_time)
+# # get end time
+# stop_time = time.time()
+# print("Execution time", stop_time-start_time)
 
 
 # # Logic for inserting into patent_citations table
@@ -460,4 +460,118 @@ print("Execution time", stop_time-start_time)
 
 # # get end time
 # stop_time = time.time()
+# print("Execution time", stop_time-start_time)
+
+
+# # Logic for inserting into topic_data table
+# # define insert query
+# insert_query = "insert into topic_data (id, topic_id, word, probability) values(%(id)s," + \
+# 			   " %(topic_id)s, %(word)s, %(probability)s) on duplicate key update id = %(id)s,"+ \
+# 			   " topic_id = %(topic_id)s, word = %(word)s, probability = %(probability)s ;"
+
+# # record start time
+# start_time = time.time()
+
+# file = "top_words.csv"
+
+# # read csv file and get contents
+# with open(file, 'r') as csv_file:
+# 	csv_reader = csv.reader(csv_file)
+
+# 	# remove header
+# 	next(csv_reader)
+
+# 	for row in csv_reader:
+
+# 		# make data for insert query
+# 		insert_query_data = {
+# 			'id': row[0],
+# 			'topic_id': row[1],
+# 			'word': row[2],
+# 			'probability': row[3],
+# 		}
+
+# 		# printing for log purposes
+# 		print(insert_query_data['id'])
+
+# 		# execute the insert query
+# 		cursor.execute(insert_query, insert_query_data)
+# 		connection.commit()
+
+# # close the mysql connection
+# connection.close()
+
+
+start_time = time.time()
+
+patent_year_dict = {}
+file = "./patentData/apat63_99.csv"
+# read csv file and get contents
+with open(file, 'r') as csv_file:
+	csv_reader = csv.reader(csv_file)
+
+	# remove header
+	next(csv_reader)
+
+	for row in csv_reader:
+
+		patent_id = row[0].strip()
+		year = row[1].strip()
+
+		patent_year_dict[patent_id] = year
+
+# get end time
+stop_time = time.time()
+print("Execution time for reading years", stop_time-start_time)
+
+# print(patent_year_dict)
+
+# Logic for inserting into patent_topics table
+# define insert query
+insert_query = 	"insert into patent_topics (patent_id, year, "
+for i in range(0, 10):
+	insert_query = insert_query + "topic" + str(i) + ", "
+insert_query = insert_query[:-2] + ") values(%(patent_id)s, %(year)s, "
+for i in range(0, 10):
+	insert_query = insert_query + "%(topic" + str(i) + ")s, "
+insert_query = insert_query[:-2] + ") on duplicate key update patent_id = %(patent_id)s, year = %(year)s, "
+for i in range(0, 9):
+	insert_query = insert_query + "topic" + str(i) +"= %(topic" + str(i) + ")s, "
+insert_query = insert_query[:-2] + ";"
+
+# record start time
+start_time = time.time()
+
+file = "doc_topic_distribution.csv"
+
+insert_query_data = {}
+
+# read json file and get contents
+with open(file, 'r') as csv_file:
+	csv_reader = csv.reader(csv_file)
+	count = 0
+
+	for row in csv_reader:
+		if row[0].strip() in patent_year_dict:
+
+			insert_query_data['patent_id'] = "US"+row[0].strip()+"A"
+			insert_query_data['year'] = patent_year_dict[row[0].strip()]
+			for i in range(0, 10):
+				index = str(i)
+				insert_query_data['topic'+index] = row[i+1]
+
+			# execute the insert query
+			cursor.execute(insert_query, insert_query_data)
+			connection.commit()
+
+			# printing for log purposes
+			count = count + 1
+			if count%100==0: 
+				print(insert_query_data['patent_id'], count)
+
+# close the mysql connection
+connection.close()
+
+# get end time
+stop_time = time.time()
 # print("Execution time", stop_time-start_time)

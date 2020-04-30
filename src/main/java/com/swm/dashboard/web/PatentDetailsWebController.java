@@ -62,4 +62,14 @@ public class PatentDetailsWebController {
         }
         return patentYearCountList;
     }
+
+    //get patent details sorted by year
+    @CrossOrigin
+    @GetMapping("api/yearwise_sorted_patent_details")
+    public List<PatentDetails> getYearwiseSortedPatentDetails() {
+        List<PatentDetails> patentDetailsList = new ArrayList<>();
+        Iterable<PatentDetails> patentDetailsIterable = this.patentDetailsRepository.findYearwisePatentDetails();
+        patentDetailsIterable.forEach(patentDetailsList::add);
+        return patentDetailsList;
+    }
 }

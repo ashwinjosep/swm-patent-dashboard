@@ -67,16 +67,6 @@
             </div>
             <div id="patentList" class="patentList">
               <div id="loadingText"></div>
-<!--               	<ul id='patentListUl' class='patentListClass'>
-	                <li id="item1" onclick="updateChartsBasedOnPatent(item1)" class="ripple">
-	                  <div class="patentListItemId">
-	                    US1525015A
-	                  </div>
-	                  <div class="patentListItemCount">
-	                    400
-	                  </div>
-	                </li>
-	            <ul> -->
             </div>
             <div id ="searchNav" class="searchNav">
               <div class="searchNavFirst">
@@ -163,10 +153,10 @@
             <div id='card9Content' class="cardContent">
               <canvas id='topicYearChart' class="barChart"></canvas>
               <div id="yearSlider" class="yearSlider">
-                <button id="sliderButton" title="Play Animation" class="btn icon" onclick="playYearTopicSim()">
+                <button id="sliderButton" title="Toggle Animation" class="btn icon" onclick="playYearTopicSim()">
                     <i id="sliderButtonText" class="fa fa-play"></i>
                 </button>
-                <input id="slider" type="range" min="1963" max="1999" oninput="sliderUpdate()" class="slider" id="myRange">
+                <input id="slider" type="range" min="1963" max="1999" oninput="sliderUpdate()" class="slider">
               </div>
               <div id='sliderValue' class="sliderValueText">1963</div>
             </div>
@@ -187,8 +177,6 @@
       <footer class="footer">
        <div class="footer__1"><a href="https://snap.stanford.edu/data/cit-Patents.html" target="_blank">Snap Dataset</a></div>
        <div class="footer__2"><a href="http://data.nber.org/patents/" target="_blank">NBER Patent Dataset</a></div>
-<!--        <div class="footer__3">Link 3</div>-->
-<!--        <div class="footer__4">Link 4</div>-->
       </footer>
     </div>
   </body>

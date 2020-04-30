@@ -18,8 +18,12 @@ public interface PatentDetailsRepository extends CrudRepository<PatentDetails, S
     @Query(value = "select * from patent_details where patent_id = :patentId", nativeQuery = true)
     public PatentDetails findPatentDetailsByPatentId(@Param("patentId") String patentId);
 
-    // query to get patent details corresponding to a patent
+    // query to get aggregated year wise patent details
     @Query(value = "select year as Year, count(patent_id) as Count from patent_details group by year order by year asc", nativeQuery = true)
     public List<Object[]>findPatentYearwiseCount();
+
+    // query to get sorted year wise patent data
+    @Query(value = "select * from patent_details order by year asc;", nativeQuery = true)
+    public Iterable<PatentDetails> findYearwisePatentDetails();
 
 }

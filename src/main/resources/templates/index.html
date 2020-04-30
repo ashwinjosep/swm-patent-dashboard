@@ -1,92 +1,195 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-      <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="/css/styles.css">
-      <link href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-      <script src="/js/scripts.js"></script>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="/js/scripts.js"></script>
     <title>SWM Dashboard</title>
-  </head>
-  <body>
-    <div class="grid-container">
-      <header class="header">
+</head>
+<body>
+<div class="grid-container">
+    <header class="header">
         <div class="header__1">Semantic Web Mining Dashboard</div>
-<!--        <div class="header__2">Page 2</div>-->
-<!--        <div class="header__3">Page 3</div>-->
-<!--        <div class="header__4">Page 4</div>-->
-      </header>
+        <div id="patentTitle" class="header__2"><a id="patentTitleLink" target="_blank" href=""></a></div>
+        <!--        <div class="header__3">Page 3</div>-->
+        <!--        <div class="header__4">Page 4</div>-->
+    </header>
 
-      <aside class="sidenav">
+    <aside class="sidenav">
         <ul class="sidenav__list" id="sidenav__list">
-          <li class="sidenav__list-item ripple active_sidenav" id="sidenav_1" onclick="changeSection(sidenav_1)">Patent Viewer</li>
-          <li class="sidenav__list-item ripple" id="sidenav_2" onclick="changeSection(sidenav_2)">Topic Viewer</li>
+            <li class="sidenav__list-item ripple active_sidenav" id="sidenav_1" onclick="changeSection(sidenav_1)">Patent Viewer</li>
+            <li class="sidenav__list-item ripple" id="sidenav_2" onclick="changeSection(sidenav_2)">Topic Viewer</li>
+            <li class="sidenav__list-item ripple" id="sidenav_3" onclick="changeSection(sidenav_3)">Edge Prediction</li>
         </ul>
-      </aside>
+    </aside>
 
-      <main class="main">
+    <main class="main">
 
-<!--         <div class="main-header">
-          <div class="main-header__heading" id="main-header__heading">Patent Viewer</div>
+        <!--         <div class="main-header">
+                  <div class="main-header__heading" id="main-header__heading">Patent Viewer</div>
 
-          <div class="main-dropdown">
-            <select id="filter" class="main-filter">
-              <option value="option_1">Option 1</option>
-              <option value="option_1">Option 2</option>
-            </select>
-          </div>
-        </div> -->
+                  <div class="main-dropdown">
+                    <select id="filter" class="main-filter">
+                      <option value="option_1">Option 1</option>
+                      <option value="option_1">Option 2</option>
+                    </select>
+                  </div>
+                </div> -->
 
-<!--        <div class="main-overview">-->
-<!--          <div class="overviewcard">-->
-<!--            <div class="overviewcard__icon">Overview</div>-->
-<!--            <div class="overviewcard__info">Card</div>-->
-<!--          </div>-->
-<!--          <div class="overviewcard">-->
-<!--            <div class="overviewcard__icon">Overview</div>-->
-<!--            <div class="overviewcard__info">Card</div>-->
-<!--          </div>-->
-<!--          <div class="overviewcard">-->
-<!--            <div class="overviewcard__icon">Overview</div>-->
-<!--            <div class="overviewcard__info">Card</div>-->
-<!--          </div>-->
-<!--          <div class="overviewcard">-->
-<!--            <div class="overviewcard__icon">Overview</div>-->
-<!--            <div class="overviewcard__info">Card</div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--        <div class="main-overview">-->
+        <!--          <div class="overviewcard">-->
+        <!--            <div class="overviewcard__icon">Overview</div>-->
+        <!--            <div class="overviewcard__info">Card</div>-->
+        <!--          </div>-->
+        <!--          <div class="overviewcard">-->
+        <!--            <div class="overviewcard__icon">Overview</div>-->
+        <!--            <div class="overviewcard__info">Card</div>-->
+        <!--          </div>-->
+        <!--          <div class="overviewcard">-->
+        <!--            <div class="overviewcard__icon">Overview</div>-->
+        <!--            <div class="overviewcard__info">Card</div>-->
+        <!--          </div>-->
+        <!--          <div class="overviewcard">-->
+        <!--            <div class="overviewcard__icon">Overview</div>-->
+        <!--            <div class="overviewcard__info">Card</div>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
-        <div class="main-cards">
+        <div id='mainCards' class="main-cards">
 
-          <div class="card" id="patent_table">
-            <div id="loadingText"></div>
-            <div id="patentList" class="patentList">
-<!--               	<ul id='patentListUl' class='patentListClass'>
-	                <li id="item1" onclick="updateChartsBasedOnPatent(item1)" class="ripple">
-	                  <div class="patentListItemId">
-	                    US1525015A
-	                  </div>
-	                  <div class="patentListItemCount">
-	                    400
-	                  </div>
-	                </li>
-	            <ul> -->
+            <div class="card" id="patent_table">
+                <div class='patentListClassHeading'>
+                    <div class='patentListItemId'>Patent ID</div>
+                    <div class='patentListItemCount'>Citation Count</div>
+                </div>
+                <div id="patentList" class="patentList">
+                    <div id="loadingText"></div>
+                    <!--               	<ul id='patentListUl' class='patentListClass'>
+                                        <li id="item1" onclick="updateChartsBasedOnPatent(item1)" class="ripple">
+                                          <div class="patentListItemId">
+                                            US1525015A
+                                          </div>
+                                          <div class="patentListItemCount">
+                                            400
+                                          </div>
+                                        </li>
+                                    <ul> -->
+                </div>
+                <div id ="searchNav" class="searchNav">
+                    <div class="searchNavFirst">
+                        <a title="First Page" id="f" onclick="pageChange(f)"><i class="fa fa-fast-backward icon" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="searchNavPrev">
+                        <a title="Previous Page" id="p" onclick="pageChange(p)"><i class="fa fa-step-backward icon" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="searchNavMiddle horizontal-scroll-wrapper">
+                        <ul id="searchNavList">
+                        </ul>
+                    </div>
+                    <div class="searchNavNext">
+                        <a title="Next Page" id="n" onclick="pageChange(n)"><i class="fa fa-step-forward icon" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="searchNavLast">
+                        <a title="Last Page" id="l" onclick="pageChange(l)"><i class="fa fa-fast-forward icon" aria-hidden="true"></i></a>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div id="card2" class="card">Card</div>
-          <div id="card3" class="card">Card</div>
-          <div id="card4" class="card">Card</div>
-          <div id="card5" class="card">Card</div>
+            <div id="card5" class="card">
+                <div id='card5Heading' class='cardHeading'>Topic Distribution (LDA)</div>
+                <div id='card5Content' class="cardContent">
+                    <canvas id='topicDistributionChart' class="barChart"></canvas>
+                    <div id="card5Text">
+                        No Data Available
+                    </div></div>
+            </div>
+            <div id="card7" class="card">
+                <div id='card7Heading' class='cardHeading'>Similar Patents (Vector Embeddings)</div>
+                <div id='card7Content' class="cardContent">
+                    <canvas id='embeddingChart' class="barChart"></canvas>
+                    <div id="card7Text">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card3" class="card">
+                <div id='card3Heading' class='cardHeading'>Similar Patents (Tf-idf)</div>
+                <div id='card3Content' class="cardContent">
+                    <canvas id='tfidfChart' class="barChart"></canvas>
+                    <div id="card3Text">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card8" class="card">
+                <div id='card8Heading' class='cardHeading'>Similar Patents (Bert Embeddings)</div>
+                <div id='card8Content' class="cardContent">
+                    <canvas id='bertChart' class="barChart"></canvas>
+                    <div id="card8Text">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card4" class="card">
+                <div id='card4Heading' class='cardHeading'>Similar Patents (LDA)</div>
+                <div id='card4Content' class="cardContent">
+                    <canvas id='ldaChart' class="barChart"></canvas>
+                    <div id="card4Text">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card2" class="card">
+                <div id='card2Heading' class='cardHeading'>Top Keywords</div>
+                <div id='card2Content' class="cardContent">
+                    <div id="patentKeywordList" class="patentKeywordList">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card6" class="card">
+                <div id='card6Heading' class='cardHeading'>Yearly Utility Patent Counts</div>
+                <div id='card6Content' class="cardContent">
+                    <canvas id='patentYearChart' class="barChart"></canvas>
+                    <div id="card6Text">
+                        No Data Available
+                    </div>
+                </div>
+            </div>
+            <div id="card9" class="card">
+                <div id='card9Heading' class='cardHeading'>Yearwise Topic Distribution</div>
+                <div id='card9Content' class="cardContent">
+                    <canvas id='topicYearChart' class="barChart"></canvas>
+                    <div id="yearSlider" class="yearSlider">
+                        <button id="sliderButton" title="Toggle Animation" class="btn icon" onclick="playYearTopicSim()">
+                            <i id="sliderButtonText" class="fa fa-play"></i>
+                        </button>
+                        <input id="slider" type="range" min="1963" max="1999" oninput="sliderUpdate()" class="slider">
+                    </div>
+                    <div id='sliderValue' class="sliderValueText">1963</div>
+                </div>
+            </div>
+            <div id="card10" class="card">
+                <div id='card10Content' class="cardContent">
+                    <div id="patentInputBoxes" class="patentInputBoxes">
+                        To Do
+                    </div>
+                    <div class="patentPredictions" id="patentPredictions">
+                        Prediction
+                    </div>
+                </div>
+            </div>
         </div>
-      </main>
+    </main>
 
-      <footer class="footer">
-<!--        <div class="footer__1">Link 1</div>-->
-<!--        <div class="footer__2">Link 2</div>-->
-<!--        <div class="footer__3">Link 3</div>-->
-<!--        <div class="footer__4">Link 4</div>-->
-      </footer>
-    </div>
-  </body>
+    <footer class="footer">
+        <div class="footer__1"><a href="https://snap.stanford.edu/data/cit-Patents.html" target="_blank">Snap Dataset</a></div>
+        <div class="footer__2"><a href="http://data.nber.org/patents/" target="_blank">NBER Patent Dataset</a></div>
+        <!--        <div class="footer__3">Link 3</div>-->
+        <!--        <div class="footer__4">Link 4</div>-->
+    </footer>
+</div>
+</body>
 </html>

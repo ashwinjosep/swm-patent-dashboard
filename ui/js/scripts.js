@@ -10,7 +10,7 @@ function initializerFunction() {
     Chart.defaults.global.defaultFontFamily = "'Sen', sans-serif";
     Chart.defaults.global.defaultFontStyle = "bold";
     updateCard6();
-    updateCard9();
+    getCard9Data();
     hideDiv('card6');
     hideDiv('card9');
     hideDiv('card10');
@@ -685,6 +685,7 @@ function playYearTopicSim()
         sliderButton.classList.add("fa-play");
       }
       else {
+
         window.year++;
       }
       updateCard9()
@@ -716,106 +717,36 @@ function sliderUpdate() {
   updateCard9();
 }
 
+function getCard9Data() {
+  $.ajax({
+      type:"GET",
+      url: "http://localhost:8080//api/patent_yearwise_topics",
+      dataType: "JSON",
+  }).then(function(data) {
+
+    var dataDictionary = {};
+    for(i=0;i<data.length;i++)
+    {
+      dataDictionary[parseInt(data[i].year)] = [data[i].topic0, data[i].topic1, data[i].topic2, data[i].topic3, data[i].topic4, data[i].topic5, data[i].topic6, data[i].topic7, data[i].topic8, data[i].topic9];
+    }
+    window.topicYearData = dataDictionary;
+    updateCard9();
+  });
+}
+
 //function to update card 9
 function updateCard9() {
-  // $.ajax({
-  //     type:"GET",
-  //     url: "http://localhost:8080/api/yearwise_patent_details",
-  //     dataType: "JSON",
-  // }).then(function(data) {
-  //     // $('#loadingText').html('');
-  //     window.yearwise_patent_count = data;
-  //     if(data.length!==0)
-  //     {
-  //       $('#card6Text').html('');
-  //       // convert keys to array to fit bar chart
-  //       var years = [];
-  //       var counts = [];
-  //       for(i=0;i<data.length;i++)
-  //       {
-  //         years.push(data[i]['year']);
-  //         counts.push(data[i]['count'])
-  //       }
-  //
-  //       var patentYearChart = document.getElementById('patentYearChart').getContext('2d');
-  //
-  //       //draw new chart only if chart doesn't already exist
-  //       if(window.patentYearDrawnChart!==undefined)
-  //       {
-  //         window.patentYearDrawnChart.destroy();
-  //       }
-  //       window.patentYearDrawnChart = new Chart(patentYearChart, {
-  //         type: 'line',
-  //         data: {
-  //             labels: years,
-  //             datasets: [{
-  //                 label: 'Years',
-  //                 data: counts,
-  //                 backgroundColor: 'rgba(216, 115, 127, 0.7)',//'#D8737F',
-  //                 borderColor: '#AB6C82',
-  //                 borderWidth: 2,
-  //             }]
-  //         },
-  //         options: {
-  //             legend: {
-  //               display: false,
-  //             },
-  //             labels: {
-  //               defaultFontFamily: "'Sen', sans-serif",
-  //             },
-  //             scales: {
-  //                 xAxes: [{
-  //                     gridLines: {
-  //                       color: '#ecf0f1',
-  //                       borderDash: [8, 6],
-  //                       lineWidth: 2,
-  //                     },
-  //                     ticks: {
-  //                         beginAtZero: true,
-  //                         display: true,
-  //                     },
-  //                     scaleLabel: {
-  //                       display: true,
-  //                       labelString: 'Year'
-  //                     },
-  //                 }],
-  //                 yAxes: [{
-  //                   gridLines: {
-  //                     color: '#ecf0f1',
-  //                     borderDash: [8, 4],
-  //                     lineWidth: 2,
-  //                   },
-  //                   scaleLabel: {
-  //                     display: true,
-  //                     labelString: 'Patent Count'
-  //                   },
-  //                 }],
-  //             }
-  //         }
-  //       });
-  //     }
-  // });
 
   //get chart
   var topicYearChart = document.getElementById('topicYearChart').getContext('2d');
-
-  //todo : query data here
-
-  //define dataset
-  labels = ['Topic1','Topic2','Topic3','Topic4','Topic5','Topic6','Topic7','Topic8','Topic9','Topic10'];
-  topicData = [];
 
   // update slider value
   document.getElementById('slider').value = parseInt(window.year);
   $('#sliderValue').html(window.year);
 
-  if(window.year%2==0)
-  {
-    topicData = [7, 4, 5, 6, 7, 7, 8, 3, 9, 10];
-  }
-  else {
-    topicData = [2, 3, 5, 6, 5, 9, 8, 3, 9, 10];
-  }
+  //define dataset
+  labels = ['Topic0','Topic1','Topic2','Topic3','Topic4','Topic5','Topic6','Topic7','Topic8','Topic9'];
+  topicData = window.topicYearData[parseInt(window.year)];
 
   //draw new chart only if chart doesn't already exist
   if(window.topicYearDrawnChart!==undefined)
