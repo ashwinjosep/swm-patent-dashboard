@@ -1,34 +1,34 @@
 HELP.md
-target/
+/code/swm-patent-dashboard/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
 
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+/code/swm-patent-dashboard/.apt_generated
+/code/swm-patent-dashboard/.classpath
+/code/swm-patent-dashboard/.factorypath
+/code/swm-patent-dashboard/.project
+/code/swm-patent-dashboard/.settings
+/code/swm-patent-dashboard/.springBeans
+/code/swm-patent-dashboard/.sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+/code/swm-patent-dashboard/.idea
 *.iws
 *.iml
 *.ipr
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
+/code/swm-patent-dashboard/nbproject/private/
+/code/swm-patent-dashboard/nbbuild/
+/code/swm-patent-dashboard/dist/
+/code/swm-patent-dashboard/nbdist/
+/code/swm-patent-dashboard/.nb-gradle/
+/code/swm-patent-dashboard/build/
 
 ### VS Code ###
-.vscode/
+/code/swm-patent-dashboard/.vscode/
 
 /data/patentData/*
 /data/keywords/*
