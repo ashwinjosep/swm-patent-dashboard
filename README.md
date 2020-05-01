@@ -9,8 +9,8 @@ Set up mysql with a user 'swmuser' and password 'password' and give the user acc
 ## Execution Steps
 Execute the java spring backend built using Maven and run a simple http server within the UI folder to have the UI up and running.
 
-## Data location
-Document data were processed and tokenized dataframes are stored in pickle files for easier reuse. Also the built LDA model and its associated dictionary and corpus are stored in a shared google drive. The link for the drive - https://drive.google.com/open?id=1zTgGrp4pGhyulAFFSbYaoglA3zO2mdWU
+## LDA Data location
+Document data were processed and tokenized dataframes are stored in pickle files for easier reuse. The generated LDA model and its associated dictionary and corpus are also stored in a shared google drive. The link for the drive - https://drive.google.com/open?id=1zTgGrp4pGhyulAFFSbYaoglA3zO2mdWU
 
 ## UI Screenshots
 ### Patent Viewer
