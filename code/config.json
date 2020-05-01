@@ -1,0 +1,17 @@
+{
+  "locations": {
+    "bert_embeddings": "",
+    "universal_embeddings": "",
+    "zipped_patents": "",
+    "bert_nearest_10": "",
+    "universal_nearest_10": "",
+    "bert_feature_1": "",
+    "bert_feature_2": "",
+    "bert_feature_1_neg": "",
+    "bert_feature_2_neg": "",
+    "universal_feature_1": "",
+    "universal_feature_2": "",
+    "universal_feature_1_neg": "",
+    "universal_feature_2_neg": "",
+  }
+}
